@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <!-- ViewPager2 para gerenciar o conteúdo das abas e o deslizamento -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" /> <!-- layout_weight="1" faz com que o ViewPager2 ocupe o espaço restante -->
+
+    <!-- TabLayout para exibir as abas -->
+    <!-- tabMode="fixed" garante que todas as abas caibam na tela -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabMode="fixed"
+        app:tabTextAppearance="@style/CustomTabTextStyle"
+        app:tabTextColor="?android:attr/textColorPrimary"
+        app:tabIndicatorColor="?android:attr/textColorPrimary"
+        app:tabIconTint="?android:attr/textColorPrimary" />
+</LinearLayout>

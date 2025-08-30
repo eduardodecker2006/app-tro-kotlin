@@ -1,0 +1,14 @@
+<resources>
+    <!-- Se você já tem um tema base, adicione o style dentro dele ou referencie-o -->
+    <!-- Exemplo de um tema base (pode ser diferente no seu projeto) -->
+    <!-- <style name="Theme.MyApplication" parent="Theme.MaterialComponents.DayNight.DarkActionBar"> -->
+    <!-- Atributos do tema base -->
+    <!-- </style> -->
+
+    <style name="CustomTabTextStyle" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">8sp</item> <!-- Defina o tamanho do texto desejado aqui -->
+        <!-- Você também pode definir outras propriedades de texto como: -->
+        <!-- <item name="android:textColor">@color/seu_cor_de_texto</item> -->
+        <!-- <item name="textAllCaps">false</item> -->
+    </style>
+</resources>

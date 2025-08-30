@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="300dp"
+    android:height="120dp"
+    android:viewportWidth="300"
+    android:viewportHeight="120">
+
+    <!-- Fio esquerdo -->
+    <path
+        android:pathData="M20,60 L80,60"
+        android:strokeWidth="4"
+        android:strokeColor="#C0C0C0"
+        android:strokeLineCap="round" />
+
+    <!-- Fio direito -->
+    <path
+        android:pathData="M220,60 L280,60"
+        android:strokeWidth="4"
+        android:strokeColor="#C0C0C0"
+        android:strokeLineCap="round" />
+
+    <!-- Corpo do resistor (bege/amarelo claro) com bordas arredondadas -->
+    <path
+        android:pathData="M100,40 Q80,40 80,60 Q80,80 100,80 L200,80 Q220,80 220,60 Q220,40 200,40 Z"
+        android:fillColor="#F5DEB3"
+        android:strokeColor="#D2B48C"
+        android:strokeWidth="2" />
+</vector>

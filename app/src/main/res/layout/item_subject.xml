@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/layout/item_disciplina_button.xml -->
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="?android:attr/colorBackground"> <!-- MODIFICADO: Adapta ao tema -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorOnSurfaceInverse"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <!-- Linha 1: Nome da disciplina e Status -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp">
+
+            <!-- Nome da disciplina -->
+            <TextView
+                android:id="@+id/tv_disciplina_nome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="8dp"
+                android:layout_toStartOf="@+id/tv_disciplina_status"
+                android:text="Análise de Circuitos I"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold" /> <!-- MODIFICADO: Adapta ao tema -->
+            <!-- android:fontFamily="sans-serif-medium" /> --> <!-- Removido fontFamily para usar o padrão do tema ou defina um compatível com temas -->
+
+            <!-- Badge do Status (Alinhado à direita) -->
+            <TextView
+                android:id="@+id/tv_disciplina_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/status_active_background"
+                android:elevation="2dp"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:text="ATIVO"
+                android:textColor="@android:color/white"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <!-- Descrição -->
+        <TextView
+            android:id="@+id/tv_disciplina_descricao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:ellipsize="end"
+            android:lineSpacingMultiplier="1.2"
+            android:maxLines="3"
+            android:text="Diferentes métodos, como Leis de Kirchhoff, para análise de circuitos elétricos"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="14sp" />
+        <!-- android:fontFamily="sans-serif" /> -->
+
+        <!-- Linha inferior: Curso, Semestre e Fórmulas -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.8"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"> <!-- Leve ajuste no alpha para diferenciar -->
+
+            <!-- Curso -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/ic_book"
+                    app:tint="?android:attr/textColorTertiary" />
+
+                <TextView
+                    android:id="@+id/tv_disciplina_curso"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Eletrônica"
+                    android:textColor="?android:attr/textColorTertiary"
+                    android:textSize="12sp"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+            <!-- Semestre (Movido para cá) -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/ic_school"
+                    app:tint="?android:attr/textColorTertiary" />
+
+                <TextView
+                    android:id="@+id/tv_disciplina_semestre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3° semestre"
+                    android:textColor="?android:attr/textColorTertiary"
+                    android:textSize="12sp" />
+                <!-- android:fontFamily="sans-serif" /> -->
+            </LinearLayout>
+
+            <!-- Contador de fórmulas -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/ic_formula"
+                    app:tint="?android:attr/textColorTertiary" />
+
+                <TextView
+                    android:id="@+id/tv_disciplina_formulas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="6 fórmulas"
+                    android:textColor="?android:attr/textColorTertiary"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    </androidx.cardview.widget.CardView>

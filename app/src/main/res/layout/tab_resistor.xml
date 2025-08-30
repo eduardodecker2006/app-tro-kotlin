@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".ResistorTab">
+
+    <!-- CardView com Resistor -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/meu_card_view_vazio"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="?attr/colorOnSurfaceInverse"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="6dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="16dp">
+
+            <!-- Resistor Images Container -->
+            <FrameLayout
+                android:layout_width="240dp"
+                android:layout_height="80dp"
+                android:layout_marginBottom="8dp">
+
+                <!-- Base do resistor -->
+                <ImageView
+                    android:id="@+id/resistor_base"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/resistor_base" />
+
+                <!-- Faixa 1 -->
+                <ImageView
+                    android:id="@+id/band1_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/resistor_band1" />
+
+                <!-- Faixa 2 -->
+                <ImageView
+                    android:id="@+id/band2_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/resistor_band2" />
+
+                <!-- Faixa 3 (Multiplicador) -->
+                <ImageView
+                    android:id="@+id/band3_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/resistor_band3" />
+
+                <!-- Faixa 4 (Tolerância) -->
+                <ImageView
+                    android:id="@+id/band4_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/resistor_band4" />
+            </FrameLayout>
+
+            <!-- Container para texto e ícone -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Resistência:"
+                        android:textSize="12sp"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:layout_marginBottom="2dp" />
+
+                    <TextView
+                        android:id="@+id/resistance_value"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="--- Ω"
+                        android:textSize="16sp"
+                        android:textColor="?android:attr/textColorPrimary"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <!-- Ícone de validação E12 -->
+                <ImageView
+                    android:id="@+id/validation_icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="12dp"
+                    android:src="@drawable/ic_check"
+                    android:visibility="gone"
+                    android:contentDescription="Validação E12" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Container para as Colunas de Botões -->
+    <LinearLayout
+        android:id="@+id/container_das_colunas"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:baselineAligned="false">
+
+    <!-- Coluna 1 de Botões -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingEnd="2dp"
+        android:paddingStart="2dp">
+        <!-- Botões 0-9 para Coluna 1 -->
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c1_0" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/black" android:text="0"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c1_1" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/brown" android:text="1"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c1_2" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/red" android:text="2"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c1_3" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/orange" android:text="3"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c1_4" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/yellow" android:text="4"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c1_5" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/green" android:text="5"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c1_6" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/blue" android:text="6"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c1_7" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/violet" android:text="7"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c1_8" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/gray" android:text="8"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c1_9" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/white" android:text="9"/>
+    </LinearLayout>
+
+    <!-- Coluna 2 de Botões -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingEnd="2dp"
+        android:paddingStart="2dp">
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c2_0" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/black" android:text="0"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c2_1" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/brown" android:text="1"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c2_2" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/red" android:text="2"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c2_3" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/orange" android:text="3"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c2_4" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/yellow" android:text="4"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c2_5" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/green" android:text="5"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c2_6" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/blue" android:text="6"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c2_7" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/violet" android:text="7"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c2_8" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/gray" android:text="8"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c2_9" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/white" android:text="9"/>
+    </LinearLayout>
+
+    <!-- Coluna 3 de Botões -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingEnd="2dp"
+        android:paddingStart="2dp">
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c3_0" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/black" android:text="x1"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c3_1" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/brown" android:text="x10"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c3_2" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/red" android:text="x100"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c3_3" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/orange" android:text="x10³"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c3_4" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/yellow" android:text="x10⁴"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c3_5" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/green" android:text="x10⁵"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c3_6" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/blue" android:text="x10⁶"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c3_7" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/violet" android:text="x10⁷"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c3_8" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/gray" android:text="x10⁸"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c3_9" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/white" android:text="x10⁹"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c3_10" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/golden" android:text="x0.1"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c3_11" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/silver" android:text="x0.01"/>
+    </LinearLayout>
+
+    <!-- Coluna 4 de Botões -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:paddingEnd="2dp"
+        android:paddingStart="2dp">
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c4_0" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" android:text="" android:visibility="invisible"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c4_1" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/brown" android:text="±1%"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c4_2" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/red" android:text="±2%"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c4_3" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" android:text="" android:visibility="invisible"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c4_4" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" android:text="" android:visibility="invisible"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c4_5" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/green" android:text="±0.5%"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c4_6" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/blue" android:text="±0.25%"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c4_7" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/violet" android:text="±0.1%"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c4_8" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/gray" android:text="±0.05%"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c4_9" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" android:text="" android:visibility="invisible"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c4_10" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/golden" android:text="±5%"/>
+        <com.google.android.material.button.MaterialButton android:id="@+id/btn_c4_11" style="@style/CalculadoraBotaoNumero" android:layout_height="0dp" android:layout_weight="1" app:strokeWidth="1dp" app:strokeColor="?android:attr/textColorPrimary" app:backgroundTint="@color/silver" android:text="±10%"/>
+    </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

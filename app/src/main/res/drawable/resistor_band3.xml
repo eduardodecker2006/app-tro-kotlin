@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="300dp"
+    android:height="120dp"
+    android:viewportWidth="300"
+    android:viewportHeight="120">
+    <path
+        android:pathData="M155,40 L167,40 L167,80 L155,80 Z"
+        android:fillColor="#FFFFFF"
+        android:name="band3" />
+</vector>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="300dp"
+    android:height="120dp"
+    android:viewportWidth="300"
+    android:viewportHeight="120">
+
+    <!-- Fio esquerdo -->
+    <path
+        android:pathData="M20,60 L80,60"
+        android:strokeWidth="4"
+        android:strokeColor="#C0C0C0"
+        android:strokeLineCap="round" />
+
+    <!-- Fio direito -->
+    <path
+        android:pathData="M220,60 L280,60"
+        android:strokeWidth="4"
+        android:strokeColor="#C0C0C0"
+        android:strokeLineCap="round" />
+
+    <!-- Corpo do resistor (bege/amarelo claro) com bordas arredondadas -->
+    <path
+        android:pathData="M100,40 Q80,40 80,60 Q80,80 100,80 L200,80 Q220,80 220,60 Q220,40 200,40 Z"
+        android:fillColor="#F5DEB3"
+        android:strokeColor="#D2B48C"
+        android:strokeWidth="2" />
+
+    <!-- Primeira faixa de cor (preta no exemplo) -->
+    <path
+        android:pathData="M95,40 L107,40 L107,80 L95,80 Z"
+        android:fillColor="#000000"
+        android:name="band1" />
+
+    <!-- Segunda faixa de cor (vermelha no exemplo) -->
+    <path
+        android:pathData="M125,40 L137,40 L137,80 L125,80 Z"
+        android:fillColor="#FF0000"
+        android:name="band2" />
+
+    <!-- Terceira faixa de cor (roxa no exemplo) -->
+    <path
+        android:pathData="M155,40 L167,40 L167,80 L155,80 Z"
+        android:fillColor="#800080"
+        android:name="band3" />
+
+    <!-- Quarta faixa de cor (vermelha no exemplo) -->
+    <path
+        android:pathData="M185,40 L197,40 L197,80 L185,80 Z"
+        android:fillColor="#FF0000"
+        android:name="band4" />
+
+</vector>

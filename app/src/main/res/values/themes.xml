@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Myapplication" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <!-- Cor da Barra de Status -->
+        <item name="android:statusBarColor">?android:attr/colorBackground</item>
+        <!-- LINHA CRUCIAL PARA ÍCONES ESCUROS NA BARRA DE STATUS CLARA -->
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+    </style>
+    <style name="Theme.Myapplication" parent="Base.Theme.Myapplication" />
+</resources>
