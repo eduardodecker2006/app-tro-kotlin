@@ -2,7 +2,7 @@
 
 # APP-ELETRÔNICA
 
-📱 Aplicativo educacional desenvolvido por alunos/estagiários do curso técnico de Eletrônica do [IFSUL Câmpus Pelotas](https://www.pelotas.ifsul.edu.br). Seu objetivo é **facilitar o acesso a fórmulas, explicações e resumos de cada disciplina e dos principais conteúdos da área de eletrônica**.
+📱 Aplicativo educacional desenvolvido por alunos/estagiários do curso técnico de Eletrônica do [IFSUL Câmpus Pelotas](https://www.pelotas.ifsul.edu.br). Seu objetivo é facilitar o acesso a fórmulas, explicações e resumos de cada disciplina e dos principais conteúdos da área de eletrônica. O projeto atual é uma reformulação de um já [**existente**](https://github.com/YuriXbr/eletronica-app).
 
 ---
 
