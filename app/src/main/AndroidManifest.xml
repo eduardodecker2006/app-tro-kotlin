@@ -22,6 +22,7 @@
 
         <activity
             android:name=".FormulasActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity" />
     </application>
 

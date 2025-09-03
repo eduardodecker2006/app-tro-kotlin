@@ -1,6 +1,7 @@
 package com.example.myapplication.utils
 
 import android.content.Context
+import com.example.myapplication.models.FormulaX
 import com.google.gson.Gson
 import com.example.myapplication.models.Subjects
 import java.io.IOException
@@ -34,5 +35,16 @@ class DisciplinaJsonReader {
         }
 
         return disciplinas
+    }
+
+    fun getFormulas(context: Context, disciplinaSlug: String): List<FormulaX> {
+        // Constrói o nome do arquivo baseado no slug
+        val fileName = "$disciplinaSlug.json"
+        
+        // Lê a disciplina do arquivo
+        val disciplina = readDisciplinaFromAssets(context, fileName)
+        
+        // Retorna as fórmulas da disciplina ou uma lista vazia se não encontrar
+        return disciplina?.formulas ?: emptyList()
     }
 }

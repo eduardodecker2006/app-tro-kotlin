@@ -131,12 +131,19 @@ class SubjectsTab : Fragment() {
     private fun onDisciplinaButtonClick(disciplina: Subjects) {
         Log.d("DISCIPLINA_CLICK", "Clicou na disciplina: ${disciplina.name}")
         
-        // Abrir a Activity de fórmulas
-        val intent = Intent(requireContext(), FormulasActivity::class.java).apply {
-            putExtra("disciplina_nome", disciplina.name)
-            putExtra("disciplina_slug", disciplina.slug)
+        try {
+            // Criar o intent usando o contexto da aplicação
+            val packageName = requireContext().packageName
+            val intent = Intent().apply {
+                setClassName(packageName, "$packageName.FormulasActivity")
+                putExtra("disciplina_nome", disciplina.name)
+                putExtra("disciplina_slug", disciplina.slug)
+            }
+            startActivity(intent)
+        } catch (e: Exception) {
+            Log.e("DISCIPLINA_CLICK", "Erro ao abrir FormulasActivity: ${e.message}", e)
+            Toast.makeText(requireContext(), "Erro ao abrir fórmulas: ${e.message}", Toast.LENGTH_LONG).show()
         }
-        startActivity(intent)
     }
 
     private fun showLoading(show: Boolean) {
