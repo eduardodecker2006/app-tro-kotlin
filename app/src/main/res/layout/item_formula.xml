@@ -74,7 +74,8 @@
             android:layout_height="wrap_content"
             android:minHeight="40dp"
             android:layout_marginTop="4dp"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp"
+            android:visibility="gone" /> <!-- **** ADICIONADO visibility="gone" **** -->
         <!-- FIM DA MODIFICAÇÃO -->
 
         <!-- Linha inferior: Curso, Semestre e Fórmulas (se este card for de disciplina) -->

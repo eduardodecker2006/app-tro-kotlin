@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
 
-    <!-- MODIFICADO: Usar arquivos KaTeX locais -->
-    <!-- Certifique-se de que katex.min.css, katex.min.js e a pasta 'fonts' (do pacote KaTeX)
-         estejam na sua pasta 'assets' do Android -->
     <link rel="stylesheet" href="katex.min.css">
     <script defer src="katex.min.js"></script>
 
     <style>
         body {
-            margin: 8px;
+            margin: 0; /* Removido margin de 8px para melhor controle pelo Android se necessário */
+            padding: 8px; /* Mantido um padding interno */
             font-size: 1.1em;
             overflow-x: hidden;
+            background-color: transparent; /* FUNDO TRANSPARENTE POR PADRÃO */
+            /* A cor do texto será definida via JavaScript se a função for chamada */
         }
         #formula-container {
             overflow-x: auto;
@@ -26,13 +26,8 @@
 <div id="formula-container"></div>
 
 <script type="text/javascript">
-    // MODIFICADO: Adicionados logs para depuração
     console.log("KaTeX_HTML: Script block started.");
 
-    // Verifica se KaTeX está definido logo após o script ser (supostamente) carregado
-    // Este log pode não ser 100% confiável devido ao 'defer', mas é um bom indicador.
-    // Para uma verificação mais precisa, o ideal seria um callback onload do script KaTeX se disponível,
-    // ou verificar dentro de um evento como DOMContentLoaded.
     document.addEventListener('DOMContentLoaded', (event) => {
         if (typeof katex !== 'undefined') {
             console.log("KaTeX_HTML: KaTeX object IS defined on DOMContentLoaded.");
@@ -41,6 +36,23 @@
         }
     });
 
+    // **** NOVA FUNÇÃO PARA DEFINIR A COR DO TEXTO ****
+    function setPageTextColor(colorString) {
+        if (colorString) {
+            document.body.style.color = colorString;
+            console.log("KaTeX_HTML: Cor do texto da página definida para: " + colorString);
+        } else {
+            console.warn("KaTeX_HTML: setPageTextColor chamada com cor nula ou indefinida.");
+        }
+    }
+
+    // Função para definir cor de fundo (opcional, se você quiser controlar dinamicamente)
+    // function setPageBackgroundColor(colorString) {
+    //     if (colorString) {
+    //         document.body.style.backgroundColor = colorString;
+    //         console.log("KaTeX_HTML: Cor de fundo da página definida para: " + colorString);
+    //     }
+    // }
 
     function displayFormula(latexString) {
         console.log("KaTeX_HTML: displayFormula called with: \"" + latexString + "\"");
@@ -51,7 +63,7 @@
             if (container) {
                 container.innerHTML = "Erro crítico: Biblioteca KaTeX não carregada.<br>String LaTeX: <pre>" + escapeHtml(latexString) + "</pre>";
             }
-            return; // Sai da função se KaTeX não estiver carregado
+            return;
         }
 
         if (container) {
@@ -59,13 +71,10 @@
                 katex.render(latexString, container, {
                     throwOnError: false,
                     displayMode: true,
-                    output: "html"
+                    output: "html" // Assegura a saída HTML, embora seja geralmente o padrão
                 });
                 console.log("KaTeX_HTML: KaTeX render successful for: \"" + latexString + "\"");
             } catch (e) {
-                // O erro já está sendo tratado pela opção throwOnError: false do KaTeX,
-                // que mostra o erro no próprio container.
-                // Mas podemos logar adicionalmente.
                 container.innerHTML = "Erro ao renderizar LaTeX: " + e.message +
                                       "<br>String LaTeX: <pre>" + escapeHtml(latexString) + "</pre>";
                 console.error("KaTeX_HTML: KaTeX.render Error:", e);
@@ -97,4 +106,3 @@
 </script>
 </body>
 </html>
-
