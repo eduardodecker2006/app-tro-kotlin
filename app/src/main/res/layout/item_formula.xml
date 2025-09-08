@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- res/layout/item_disciplina_button.xml -->
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -10,7 +9,7 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    app:cardBackgroundColor="?android:attr/colorBackground"> <!-- MODIFICADO: Adapta ao tema -->
+    app:cardBackgroundColor="?android:attr/colorBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,13 +18,12 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- Linha 1: Nome da disciplina e Status -->
+        <!-- Linha 1: Nome da disciplina/fórmula e Status -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp">
 
-            <!-- Nome da disciplina -->
             <TextView
                 android:id="@+id/tv_formula_name"
                 android:layout_width="wrap_content"
@@ -34,13 +32,11 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="8dp"
                 android:layout_toStartOf="@+id/tv_disciplina_status"
-                android:text="Lei de OHM"
+                android:text="Nome da Fórmula/Disciplina"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="20sp"
-                android:textStyle="bold" /> <!-- MODIFICADO: Adapta ao tema -->
-            <!-- android:fontFamily="sans-serif-medium" /> --> <!-- Removido fontFamily para usar o padrão do tema ou defina um compatível com temas -->
+                android:textStyle="bold" />
 
-            <!-- Badge do Status (Alinhado à direita) -->
             <TextView
                 android:id="@+id/tv_disciplina_status"
                 android:layout_width="wrap_content"
@@ -51,7 +47,7 @@
                 android:elevation="2dp"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="6dp"
-                android:text="ATIVO"
+                android:text="STATUS"
                 android:textColor="@android:color/white"
                 android:textSize="11sp"
                 android:textStyle="bold" />
@@ -63,24 +59,34 @@
             android:id="@+id/tv_formula_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="8dp"
             android:ellipsize="end"
             android:lineSpacingMultiplier="1.2"
             android:maxLines="3"
-            android:text="Descrição da formula em questão (exemplo)"
+            android:text="Descrição da fórmula ou disciplina..."
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp" />
-        <!-- android:fontFamily="sans-serif" /> -->
 
-        <!-- Linha inferior: Curso, Semestre e Fórmulas -->
+        <!-- MODIFICAÇÃO: WebView para renderizar a fórmula LaTeX -->
+        <WebView
+            android:id="@+id/webview_latex_formula"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="40dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="12dp"/>
+        <!-- FIM DA MODIFICAÇÃO -->
+
+        <!-- Linha inferior: Curso, Semestre e Fórmulas (se este card for de disciplina) -->
+        <!-- Se este card for de UMA fórmula, esta seção pode não ser necessária ou ser diferente -->
         <LinearLayout
+            android:id="@+id/layout_detalhes_disciplina"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="0.8"
             android:gravity="center_vertical"
-            android:orientation="horizontal"> <!-- Leve ajuste no alpha para diferenciar -->
+            android:orientation="horizontal">
 
-            <!-- Curso -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -99,14 +105,13 @@
                     android:id="@+id/tv_disciplina_curso"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Eletrônica"
+                    android:text="Curso"
                     android:textColor="?android:attr/textColorTertiary"
                     android:textSize="12sp"
                     android:textStyle="italic" />
 
             </LinearLayout>
 
-            <!-- Semestre (Movido para cá) -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -125,13 +130,11 @@
                     android:id="@+id/tv_disciplina_semestre"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3° semestre"
+                    android:text="Semestre"
                     android:textColor="?android:attr/textColorTertiary"
                     android:textSize="12sp" />
-                <!-- android:fontFamily="sans-serif" /> -->
             </LinearLayout>
 
-            <!-- Contador de fórmulas -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -149,7 +152,7 @@
                     android:id="@+id/tv_disciplina_formulas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="6 fórmulas"
+                    android:text="X fórmulas"
                     android:textColor="?android:attr/textColorTertiary"
                     android:textSize="12sp" />
             </LinearLayout>

@@ -6,7 +6,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.R
+// R já está importado implicitamente pelo nome do pacote se for do mesmo módulo.
+// Se R não for encontrado, você pode precisar de:
+// import com.example.myapplication.R
 import com.example.myapplication.adapters.FormulasAdapter
 import com.example.myapplication.models.FormulaX
 import com.example.myapplication.utils.DisciplinaJsonReader
@@ -41,7 +43,7 @@ class FormulasActivity : AppCompatActivity() {
 
         // Configurar RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
-        
+
         // Carregar e exibir fórmulas
         carregarFormulas(disciplinaSlug)
     }
@@ -49,15 +51,18 @@ class FormulasActivity : AppCompatActivity() {
     private fun carregarFormulas(disciplinaSlug: String) {
         val disciplinaJsonReader = DisciplinaJsonReader()
         val formulas = disciplinaJsonReader.getFormulas(this, disciplinaSlug)
-        
+
         // Atualizar o subtítulo com o número de fórmulas
         val numFormulas = formulas.size
         tvSubtituloFormulas.text = "$numFormulas fórmulas disponíveis"
-        
+
         // Configurar o adapter com as fórmulas
-        formulasAdapter = FormulasAdapter(formulas) { formula ->
+        // **** MODIFICAÇÃO APLICADA AQUI ****
+        formulasAdapter = FormulasAdapter(this, formulas) { formula ->
             // TODO: Implementar o que acontece quando uma fórmula é clicada
             // Por exemplo, abrir um Dialog ou uma nova Activity com os detalhes da fórmula
+            // Exemplo de log para testar o clique:
+            // android.util.Log.d("FormulasActivity", "Fórmula clicada: ${formula.name}")
         }
         recyclerView.adapter = formulasAdapter
     }
