@@ -20,6 +20,7 @@
 
         <!-- Linha 1: Nome da disciplina/fórmula e Status -->
         <RelativeLayout
+            android:id="@+id/layout_header_formula"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp">
@@ -31,30 +32,29 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="8dp"
-                android:layout_toStartOf="@+id/tv_disciplina_status"
+                android:layout_toStartOf="@+id/tv_expand_status"
                 android:text="Nome da Fórmula/Disciplina"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tv_disciplina_status"
+                android:id="@+id/tv_expand_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/status_active_background"
-                android:elevation="2dp"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="6dp"
-                android:text="STATUS"
-                android:textColor="@android:color/white"
+                android:drawableEnd="@drawable/ic_arrow_down"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:text="Expandir"
+                android:textColor="?android:attr/textColorPrimary"
                 android:textSize="11sp"
                 android:textStyle="bold" />
 
         </RelativeLayout>
 
-        <!-- Descrição -->
+        <!-- Descrição (sempre visível) -->
         <TextView
             android:id="@+id/tv_formula_description"
             android:layout_width="match_parent"
@@ -67,96 +67,25 @@
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp" />
 
-        <!-- MODIFICAÇÃO: WebView para renderizar a fórmula LaTeX -->
-        <WebView
-            android:id="@+id/webview_latex_formula"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="40dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="12dp"
-            android:visibility="gone" /> <!-- **** ADICIONADO visibility="gone" **** -->
-        <!-- FIM DA MODIFICAÇÃO -->
-
-        <!-- Linha inferior: Curso, Semestre e Fórmulas (se este card for de disciplina) -->
-        <!-- Se este card for de UMA fórmula, esta seção pode não ser necessária ou ser diferente -->
+        <!-- CONTEÚDO EXPANSÍVEL: Apenas a fórmula e detalhes -->
         <LinearLayout
-            android:id="@+id/layout_detalhes_disciplina"
+            android:id="@+id/layout_expandable_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:alpha="0.8"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:visibility="gone">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <!-- WebView para renderizar a fórmula LaTeX -->
+            <WebView
+                android:id="@+id/webview_latex_formula"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:minHeight="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp"
+                android:visibility="gone" />
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginEnd="4dp"
-                    android:src="@drawable/ic_book"
-                    app:tint="?android:attr/textColorTertiary" />
-
-                <TextView
-                    android:id="@+id/tv_disciplina_curso"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Curso"
-                    android:textColor="?android:attr/textColorTertiary"
-                    android:textSize="12sp"
-                    android:textStyle="italic" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginEnd="4dp"
-                    android:src="@drawable/ic_school"
-                    app:tint="?android:attr/textColorTertiary" />
-
-                <TextView
-                    android:id="@+id/tv_disciplina_semestre"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Semestre"
-                    android:textColor="?android:attr/textColorTertiary"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginEnd="4dp"
-                    android:src="@drawable/ic_formula"
-                    app:tint="?android:attr/textColorTertiary" />
-
-                <TextView
-                    android:id="@+id/tv_disciplina_formulas"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="X fórmulas"
-                    android:textColor="?android:attr/textColorTertiary"
-                    android:textSize="12sp" />
-            </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

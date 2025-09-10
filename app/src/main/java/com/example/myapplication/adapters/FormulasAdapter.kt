@@ -15,6 +15,7 @@ import android.webkit.WebResourceRequest // Necessário para WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -83,6 +84,13 @@ class FormulasAdapter(
         val formulaWebView: WebView = view.findViewById(R.id.webview_latex_formula)
         val container: View = view
 
+        // Novas referências para funcionalidade de expansão
+        private val expandableContentLayout: LinearLayout = itemView.findViewById(R.id.layout_expandable_content)
+        private val expandStatusTextView: TextView = itemView.findViewById(R.id.tv_expand_status)
+
+        // Variável para rastrear o estado de expansão para cada item
+        private var isExpanded = false
+
         private var isFormulaRendered = false
         private var isWebViewSetupDone = false
 
@@ -123,20 +131,43 @@ class FormulasAdapter(
             formulaWebView.isVisible = false
             isFormulaRendered = false
 
+            // Configurar o estado inicial do texto e ícone de expandir/recolher
+            updateExpandCollapseUI()
+
+            // Configurar o clique no card inteiro para expandir/recolher
             container.setOnClickListener {
+                isExpanded = !isExpanded // Alterna o estado
+                updateExpandCollapseUI()
                 onFormulaClick(formula)
-                toggleFormulaDisplay(formula)
+
+                // Renderizar a fórmula quando expandir
+                if (isExpanded && !isFormulaRendered && formula.latex.isNotEmpty()) {
+                    renderFormulaInWebView(formula)
+                }
             }
         }
 
-        private fun toggleFormulaDisplay(formula: FormulaX) {
-            if (formulaWebView.isVisible) {
-                formulaWebView.isVisible = false
+        private fun updateExpandCollapseUI() {
+            if (isExpanded) {
+                expandableContentLayout.visibility = View.VISIBLE
+                formulaWebView.visibility = View.VISIBLE
+                expandStatusTextView.text = "Recolher"
+                expandStatusTextView.setCompoundDrawablesWithIntrinsicBounds(
+                    0, // left
+                    0, // top
+                    R.drawable.ic_arrow_up, // right (drawableEnd)
+                    0  // bottom
+                )
             } else {
-                formulaWebView.isVisible = true
-                if (!isFormulaRendered && formula.latex.isNotEmpty()) {
-                    renderFormulaInWebView(formula)
-                }
+                expandableContentLayout.visibility = View.GONE
+                formulaWebView.visibility = View.GONE
+                expandStatusTextView.text = "Expandir"
+                expandStatusTextView.setCompoundDrawablesWithIntrinsicBounds(
+                    0, // left
+                    0, // top
+                    R.drawable.ic_arrow_down, // right (drawableEnd)
+                    0  // bottom
+                )
             }
         }
 
