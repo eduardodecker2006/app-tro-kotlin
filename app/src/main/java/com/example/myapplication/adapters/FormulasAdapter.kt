@@ -23,14 +23,10 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
-import com.example.myapplication.models.Constants // Importa o typealias
+import com.example.myapplication.models.Constants
 import com.example.myapplication.models.FormulaX
-import com.example.myapplication.models.Variables // Importa o typealias
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import kotlin.text.append
-import kotlin.text.forEach
-import kotlin.text.isNotEmpty
 
 class FormulasAdapter(
     private val context: Context,
@@ -58,7 +54,8 @@ class FormulasAdapter(
             val theme = context.theme
             theme.resolveAttribute(android.R.attr.textColorPrimary, typedValue, true)
             val colorInt = if (typedValue.type >= TypedValue.TYPE_FIRST_COLOR_INT &&
-                typedValue.type <= TypedValue.TYPE_LAST_COLOR_INT) {
+                typedValue.type <= TypedValue.TYPE_LAST_COLOR_INT
+            ) {
                 typedValue.data
             } else {
                 ContextCompat.getColor(context, typedValue.resourceId)
@@ -68,8 +65,8 @@ class FormulasAdapter(
             Log.e("FormulasAdapter", "Erro ao obter textColorPrimary: ${e.message}")
             val nightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
             when (nightMode) {
-                Configuration.UI_MODE_NIGHT_YES -> "#FFFFFF"
-                Configuration.UI_MODE_NIGHT_NO -> "#000000"
+                Configuration.UI_MODE_NIGHT_YES -> "#FFFFFF" // Branco para modo noturno
+                Configuration.UI_MODE_NIGHT_NO -> "#000000"  // Preto para modo claro
                 else -> "#000000"
             }
         }
@@ -79,18 +76,28 @@ class FormulasAdapter(
         val formulaName: TextView = view.findViewById(R.id.tv_formula_name)
         val formulaDescription: TextView = view.findViewById(R.id.tv_formula_description)
         val formulaWebView: WebView = view.findViewById(R.id.webview_latex_formula)
-        val container: View = itemView // itemView é o CardView
+        val container: View = itemView
 
-        private val expandableContentLayout: LinearLayout = itemView.findViewById(R.id.layout_expandable_content)
-        private val expandStatusTextView: TextView = itemView.findViewById(R.id.tv_expand_status)
-        val formulaVariablesDisplayTextView: TextView = view.findViewById(R.id.tv_formula_variables_display)
+        private val expandableContentLayout: LinearLayout = view.findViewById(R.id.layout_expandable_content)
+        private val expandStatusTextView: TextView = view.findViewById(R.id.tv_expand_status)
+
+        // Novas Views para Variáveis e Constantes
+        private val variablesHeaderTextView: TextView = view.findViewById(R.id.tv_variables_header)
+        private val variablesListTextView: TextView = view.findViewById(R.id.tv_variables_list)
+        private val separatorView: View = view.findViewById(R.id.separator_variables_constants)
+        private val constantsHeaderTextView: TextView = view.findViewById(R.id.tv_constants_header)
+        private val constantsListTextView: TextView = view.findViewById(R.id.tv_constants_list)
+        // Removido: val formulaVariablesDisplayTextView
 
         private var isExpanded = false
         private var isFormulaRendered = false
         private var isWebViewSetupDone = false
+        private lateinit var currentFormula: FormulaX
+
 
         init {
-            setupWebViewDefaults(formulaWebView)
+            // A inicialização do WebView agora é feita condicionalmente no bind
+            // para garantir que currentFormula esteja disponível.
         }
 
         @SuppressLint("SetJavaScriptEnabled")
@@ -99,13 +106,15 @@ class FormulasAdapter(
             webView.settings.javaScriptEnabled = true
             webView.settings.domStorageEnabled = true
             webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
-            webView.setBackgroundColor(0x00000000)
-            // webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null) // Opcional
+            webView.setBackgroundColor(0x00000000) // Transparente
 
             webView.webChromeClient = object : WebChromeClient() {
                 override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
                     consoleMessage?.let {
-                        Log.d("KaTeX_WebView_JS", "JS Console: \"${it.message()}\" -- (Source: ${it.sourceId()}, Line: ${it.lineNumber()})")
+                        Log.d(
+                            "KaTeX_WebView_JS",
+                            "JS Console: \"${it.message()}\" -- (Source: ${it.sourceId()}, Line: ${it.lineNumber()})"
+                        )
                     }
                     return true
                 }
@@ -114,80 +123,109 @@ class FormulasAdapter(
         }
 
         fun bind(formula: FormulaX) {
+            currentFormula = formula // Armazena a fórmula atual para uso no listener
             formulaName.text = formula.name
             formulaDescription.text = formula.description
 
-            val termsToDisplay = formatPhysicalTermsForDisplay(formula.variables, formula.constants)
-            if (termsToDisplay.isNotBlank()) {
-                formulaVariablesDisplayTextView.text = termsToDisplay
-            } else {
-                formulaVariablesDisplayTextView.text = ""
-                formulaVariablesDisplayTextView.visibility = View.GONE
+            // Inicializar e configurar o WebView aqui, pois precisamos de 'formula' para renderizar
+            if (!isWebViewSetupDone) { // Configura apenas uma vez
+                setupWebViewDefaults(formulaWebView)
             }
 
-            isFormulaRendered = false
-            // A visibilidade inicial dos componentes dentro de expandableContentLayout
-            // será gerenciada por updateExpandCollapseUI().
-            // Se o estado padrão é não expandido, eles começarão como GONE.
-            updateExpandCollapseUI()
+            // Lógica para Variáveis
+            val variablesText = formatTermsForDisplay(formula.variables)
+            if (variablesText.isNotBlank()) {
+                variablesListTextView.text = variablesText
+            } else {
+                variablesListTextView.text = "" // Limpar para garantir
+            }
+
+            // Lógica para Constantes
+            val constantsText = formatTermsForDisplay(formula.constants)
+            if (constantsText.isNotBlank()) {
+                constantsListTextView.text = constantsText
+            } else {
+                constantsListTextView.text = "" // Limpar para garantir
+            }
+
+            isFormulaRendered = false // Resetar o status de renderização para cada bind
+            updateExpandCollapseUI() // Atualiza a UI com base no estado de expansão e conteúdo
 
             container.setOnClickListener {
                 isExpanded = !isExpanded
-                updateExpandCollapseUI()
-                onFormulaClick(formula)
-
-                if (isExpanded && !isFormulaRendered && formula.latex.isNotEmpty()) {
-                    renderFormulaInWebView(formula)
-                }
+                updateExpandCollapseUI() // Atualiza a UI imediatamente ao clicar
+                onFormulaClick(formula) // Notifica o click
             }
         }
 
         private fun updateExpandCollapseUI() {
             if (isExpanded) {
                 expandableContentLayout.visibility = View.VISIBLE
-                formulaWebView.visibility = View.VISIBLE // Mostrar WebView da fórmula
-                // Mostrar TextView das variáveis apenas se tiver conteúdo
-                formulaVariablesDisplayTextView.visibility = if (formulaVariablesDisplayTextView.text.isNotBlank()) View.VISIBLE else View.GONE
+                expandStatusTextView.text = context.getString(R.string.collapse)
+                expandStatusTextView.setCompoundDrawablesWithIntrinsicBounds(
+                    0,
+                    0,
+                    R.drawable.ic_arrow_up,
+                    0
+                )
 
-                expandStatusTextView.text = "Recolher"
-                expandStatusTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0)
+                // Visibilidade do WebView
+                if (currentFormula.latex.isNotEmpty()) {
+                    formulaWebView.visibility = View.VISIBLE
+                    if (!isFormulaRendered) {
+                        renderFormulaInWebView(currentFormula)
+                    }
+                } else {
+                    formulaWebView.visibility = View.GONE
+                }
+
+                // Visibilidade das Variáveis
+                val variablesPresent = variablesListTextView.text.isNotBlank()
+                variablesHeaderTextView.visibility = if (variablesPresent) View.VISIBLE else View.GONE
+                variablesListTextView.visibility = if (variablesPresent) View.VISIBLE else View.GONE
+
+                // Visibilidade das Constantes
+                val constantsPresent = constantsListTextView.text.isNotBlank()
+                constantsHeaderTextView.visibility = if (constantsPresent) View.VISIBLE else View.GONE
+                constantsListTextView.visibility = if (constantsPresent) View.VISIBLE else View.GONE
+
+                // Visibilidade do Separador
+                separatorView.visibility = if (variablesPresent && constantsPresent) View.VISIBLE else View.GONE
+
             } else {
                 expandableContentLayout.visibility = View.GONE
+                expandStatusTextView.text = context.getString(R.string.expand)
+                expandStatusTextView.setCompoundDrawablesWithIntrinsicBounds(
+                    0,
+                    0,
+                    R.drawable.ic_arrow_down,
+                    0
+                )
                 // Não é estritamente necessário esconder os filhos aqui, pois o pai já está GONE,
-                // mas não faz mal e garante o estado.
+                // mas para garantir o estado, especialmente do WebView:
                 formulaWebView.visibility = View.GONE
-                formulaVariablesDisplayTextView.visibility = View.GONE
-
-                expandStatusTextView.text = "Expandir"
-                expandStatusTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0)
+                variablesHeaderTextView.visibility = View.GONE
+                variablesListTextView.visibility = View.GONE
+                separatorView.visibility = View.GONE
+                constantsHeaderTextView.visibility = View.GONE
+                constantsListTextView.visibility = View.GONE
             }
         }
 
-        private fun formatPhysicalTermsForDisplay(
-            variablesMap: Variables?, // Variables é Map<String, String>?
-            constantsMap: Constants?  // Constants é Map<String, String>?
-        ): SpannableStringBuilder {
+        private fun formatTermsForDisplay(termsMap: Map<String, String>?): SpannableStringBuilder {
             val builder = SpannableStringBuilder()
-
-            variablesMap?.forEach { (symbol, description) ->
-                if (builder.isNotEmpty()) builder.append("\n")
+            termsMap?.forEach { (symbol, description) ->
+                if (builder.isNotEmpty()) {
+                    builder.append("\n")
+                }
                 val start = builder.length
-                builder.append("$symbol: ") // Símbolo da grandeza
-                builder.setSpan(StyleSpan(Typeface.BOLD), start, builder.length, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE)
-                builder.append(description) // Descrição da grandeza
-            }
-
-            if (constantsMap?.isNotEmpty() == true && variablesMap?.isNotEmpty() == true) {
-                if (builder.isNotEmpty()) builder.append("\n\n") // Mais espaço antes das constantes
-            }
-
-            constantsMap?.forEach { (symbol, description) ->
-                if (builder.isNotEmpty() && !builder.endsWith("\n\n") && !builder.endsWith("\n")) builder.append("\n")
-                val start = builder.length
-                // Você pode querer diferenciar constantes, por exemplo:
-                // builder.append("(Constante) $symbol: ")
                 builder.append("$symbol: ")
-                builder.setSpan(StyleSpan(Typeface.BOLD), start, builder.length, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE)
+                builder.setSpan(
+                    StyleSpan(Typeface.BOLD),
+                    start,
+                    builder.length,
+                    SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
                 builder.append(description)
             }
             return builder
@@ -205,7 +243,8 @@ class FormulasAdapter(
                             .replace("\"", "\\\"")
                             .replace("\n", "\\n")
                         val formulaTextColor = this@FormulasAdapter.getTextColorPrimaryHex()
-                        val jsCommand = "javascript:clearFormula(); setPageTextColor('${formulaTextColor}'); displayFormula('${escapedLatex}');"
+                        val jsCommand =
+                            "javascript:clearFormula(); setPageTextColor('${formulaTextColor}'); displayFormula('${escapedLatex}');"
                         Log.d("KaTeX_JS_Command", "Executando JS: $jsCommand")
                         view?.evaluateJavascript(jsCommand, null)
                         isFormulaRendered = true
@@ -215,19 +254,29 @@ class FormulasAdapter(
                     }
                 }
 
-                override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
+                override fun onReceivedError(
+                    view: WebView?,
+                    request: WebResourceRequest?,
+                    error: WebResourceError?
+                ) {
                     super.onReceivedError(view, request, error)
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                        if (request?.isForMainFrame == true) {
-                            Log.e("KaTeX_WebView_Error", "Erro MainFrame: ${error?.errorCode} ${error?.description} para ${request.url}")
-                            isFormulaRendered = false
-                        }
+                    val errorDescription = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        "${error?.errorCode} ${error?.description}"
                     } else {
-                        Log.e("KaTeX_WebView_Error", "Erro WebView: ${error?.description} para ${request?.url}")
+                        error?.description ?: "Unknown error"
                     }
+                    val urlString = request?.url?.toString() ?: "Unknown URL"
+                    Log.e("KaTeX_WebView_Error", "Erro ao carregar WebView ($urlString): $errorDescription")
+                    isFormulaRendered = false
                 }
             }
-            formulaWebView.loadDataWithBaseURL("file:///android_asset/", htmlKatexTemplate, "text/html", "UTF-8", null)
+            formulaWebView.loadDataWithBaseURL(
+                "file:///android_asset/",
+                htmlKatexTemplate,
+                "text/html",
+                "UTF-8",
+                null
+            )
         }
     }
 
@@ -243,3 +292,4 @@ class FormulasAdapter(
 
     override fun getItemCount() = formulas.size
 }
+

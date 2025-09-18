@@ -49,13 +49,14 @@
                 android:drawablePadding="4dp"
                 android:gravity="center_vertical"
                 tools:text="Expandir"
+                android:text="@string/expand"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="11sp"
                 android:textStyle="bold" />
 
         </RelativeLayout>
 
-        <!-- Descrição (sempre visível) -->
+        <!-- Descrição (sempre visível no header, ou mova para dentro do expansível se preferir) -->
         <TextView
             android:id="@+id/tv_formula_description"
             android:layout_width="match_parent"
@@ -68,7 +69,7 @@
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp" />
 
-        <!-- CONTEÚDO EXPANSÍVEL: Apenas a fórmula e detalhes -->
+        <!-- CONTEÚDO EXPANSÍVEL -->
         <LinearLayout
             android:id="@+id/layout_expandable_content"
             android:layout_width="match_parent"
@@ -89,22 +90,71 @@
                 tools:visibility="visible"
                 tools:layout_height="50dp"/>
 
-            <!-- ***** NOVO TextView PARA AS VARIÁVEIS ***** -->
+            <!-- Seção de Variáveis -->
             <TextView
-                android:id="@+id/tv_formula_variables_display"
-                android:layout_width="match_parent"
+                android:id="@+id/tv_variables_header"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="13sp"
-                android:lineSpacingMultiplier="1.3"
+                android:text="Variáveis:"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="15sp"
+                android:textStyle="bold"
                 android:visibility="gone"
-                tools:text="F: Força (N)\nB: Campo (T)"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv_variables_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                android:lineSpacingExtra="4dp"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:text="F: Força (N)\nB: Campo Magnético (T)\nv: Velocidade (m/s)"
+                tools:visibility="visible"/>
+
+            <!-- Separador Opcional -->
+            <View
+                android:id="@+id/separator_variables_constants"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone"
+            tools:visibility="visible"/>
+
+            <!-- Seção de Constantes -->
+            <TextView
+                android:id="@+id/tv_constants_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Constantes:"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+            tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv_constants_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                android:lineSpacingExtra="4dp"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:text="π: Aproximadamente 3.14159\ne: Número de Euler (Aprox. 2.718)"
                 tools:visibility="visible"/>
 
         </LinearLayout>
-
     </LinearLayout>
 </androidx.cardview.widget.CardView>
-
