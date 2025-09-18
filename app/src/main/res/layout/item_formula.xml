@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="12dp"
@@ -33,7 +34,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="8dp"
                 android:layout_toStartOf="@+id/tv_expand_status"
-                android:text="Nome da Fórmula/Disciplina"
+                tools:text="Nome da Fórmula/Disciplina"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -47,7 +48,7 @@
                 android:drawableEnd="@drawable/ic_arrow_down"
                 android:drawablePadding="4dp"
                 android:gravity="center_vertical"
-                android:text="Expandir"
+                tools:text="Expandir"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="11sp"
                 android:textStyle="bold" />
@@ -63,7 +64,7 @@
             android:ellipsize="end"
             android:lineSpacingMultiplier="1.2"
             android:maxLines="3"
-            android:text="Descrição da fórmula ou disciplina..."
+            tools:text="Descrição da fórmula ou disciplina..."
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp" />
 
@@ -73,7 +74,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <!-- WebView para renderizar a fórmula LaTeX -->
             <WebView
@@ -83,9 +85,26 @@
                 android:minHeight="40dp"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="12dp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:visibility="visible"
+                tools:layout_height="50dp"/>
+
+            <!-- ***** NOVO TextView PARA AS VARIÁVEIS ***** -->
+            <TextView
+                android:id="@+id/tv_formula_variables_display"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="13sp"
+                android:lineSpacingMultiplier="1.3"
+                android:visibility="gone"
+                tools:text="F: Força (N)\nB: Campo (T)"
+                tools:visibility="visible"/>
 
         </LinearLayout>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
+
