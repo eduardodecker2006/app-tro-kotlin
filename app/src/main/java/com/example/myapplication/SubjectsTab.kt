@@ -81,6 +81,7 @@ class SubjectsTab : Fragment() {
                 "analise-de-circuitos-i.json",
                 "analise-de-circuitos-ii.json",
                 "analise-de-circuitos-iii.json",
+                "analise-de-circuitos-iv.json",
                 "eletricidade-i.json",
                 "eletricidade-ii.json",
                 "eletronica-digital-iv.json",
