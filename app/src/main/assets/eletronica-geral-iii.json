@@ -19,9 +19,6 @@
             "latex": [
                 "re' = \\frac{25\\,\\text{mV}}{I_E}"
             ],
-            "constants": {
-                "25mV": "Tensão fixa"
-            },
             "variables": {
                 "re'": "Resistência do Diodo Emissor",
                 "IE": "Corrente de Emissor"

@@ -85,10 +85,11 @@ class SubjectsTab : Fragment() {
                 "eletricidade-ii.json",
                 "eletronica-digital-iv.json",
                 "eletronica-digital-v.json",
+                "eletronica-geral-i.json",
                 "eletronica-geral-iii.json",
                 "eletronica-geral-v.json",
                 // Adicione aqui outros arquivos conforme você tiver:
-                // "eletronica-geral-iii.json",
+                // "eletronica-geral-iv.json",
             )
 
             Log.d("SUBJECTS_TAB", "Tentando carregar ${jsonFiles.size} arquivo(s)...")
