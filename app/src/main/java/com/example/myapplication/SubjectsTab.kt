@@ -114,7 +114,7 @@ class SubjectsTab : Fragment() {
                         "${index + 1}. ${disciplina.name} | " +
                                 "${disciplina.semmester}° sem | " +
                                 "${disciplina.status} | " +
-                                "${disciplina.formulas.size} fórmulas")
+                                "${disciplina.formulas?.size} fórmulas")
                 }
 
             } else {
@@ -132,16 +132,21 @@ class SubjectsTab : Fragment() {
 
     private fun onDisciplinaButtonClick(disciplina: Subjects) {
         Log.d("DISCIPLINA_CLICK", "Clicou na disciplina: ${disciplina.name}")
-        
+
         try {
-            // Criar o intent usando o contexto da aplicação
-            val packageName = requireContext().packageName
-            val intent = Intent().apply {
-                setClassName(packageName, "$packageName.FormulasActivity")
+            // --- A CORREÇÃO ESTÁ AQUI ---
+            // Constrói o nome do arquivo a partir do slug (ex: "analise-de-circuitos-i" -> "analise-de-circuitos-i.json")
+            val fileName = "${disciplina.slug}.json"
+
+            // Cria o intent explícito para a FormulasActivity
+            val intent = Intent(requireContext(), FormulasActivity::class.java).apply {
+                // Passa o nome do arquivo JSON, que é o método unificado de carregamento
+                putExtra("disciplina_arquivo_json", fileName)
+                // Passa o nome da disciplina para ser usado como título na próxima tela
                 putExtra("disciplina_nome", disciplina.name)
-                putExtra("disciplina_slug", disciplina.slug)
             }
             startActivity(intent)
+
         } catch (e: Exception) {
             Log.e("DISCIPLINA_CLICK", "Erro ao abrir FormulasActivity: ${e.message}", e)
             Toast.makeText(requireContext(), "Erro ao abrir fórmulas: ${e.message}", Toast.LENGTH_LONG).show()
@@ -172,7 +177,7 @@ class SubjectsTab : Fragment() {
     }
 
     /**
-     * Função pública para recarregar disciplinas (pode ser chamada de fora)
+     * Função pública para recarregar disciplinas (pode ser chamada de zfora)
      */
     fun refreshDisciplinas() {
         loadDisciplinas()

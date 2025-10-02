@@ -1,5 +1,5 @@
 {
-    "name": "Eletrônica Geral I",
+    "name_disc": "Eletrônica Geral I",
     "id": 0,
     "status": "ativo",
     "slug": "eletronica-geral-i",
@@ -247,3 +247,4 @@
     "deleted_at": null,
     "fileVersion": 2
 }
+

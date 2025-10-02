@@ -159,7 +159,11 @@ class FormulasAdapter(
         }
 
         private fun updateExpandCollapseUI() {
+            Log.d("DIAGNOSTICO_FORMULA", "2. Update UI. isExpanded agora é: $isExpanded")
             if (isExpanded) {
+
+                Log.d("DIAGNOSTICO_FORMULA", "3. Verificando WebView. Latex está presente: ${currentFormula.latex.isNotEmpty()}.")
+                Log.d("DIAGNOSTICO_FORMULA", "--> Conteúdo do LaTeX: ${currentFormula.latex}")
                 expandableContentLayout.visibility = View.VISIBLE
                 expandStatusTextView.text = context.getString(R.string.collapse)
                 expandStatusTextView.setCompoundDrawablesWithIntrinsicBounds(
@@ -173,6 +177,7 @@ class FormulasAdapter(
                 if (currentFormula.latex.isNotEmpty()) {
                     formulaWebView.visibility = View.VISIBLE
                     if (!isFormulaRendered) {
+                        Log.d("DIAGNOSTICO_FORMULA", "4. CHAMANDO renderFormulaInWebView!")
                         renderFormulaInWebView(currentFormula)
                     }
                 } else {
