@@ -46,7 +46,7 @@ class OnboardingPage1Fragment : Fragment() {
             Log.d("OnboardingFragment", "Handler ativado. Iniciando animação.")
 
 
-            val animationDuration = 1000L // 1 segundo
+            val animationDuration = 1000L
 
             imageView1.animate()
                 .alpha(0f)

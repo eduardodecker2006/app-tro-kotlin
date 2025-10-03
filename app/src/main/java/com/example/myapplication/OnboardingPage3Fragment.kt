@@ -38,14 +38,14 @@ class OnboardingPage3Fragment : Fragment() {
                 return@setOnClickListener
             }
 
-            // Se o nome for válido, remove qualquer erro anterior
+
             nameInputLayout.error = null
 
 
             val sharedPreferences = requireActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
             with(sharedPreferences.edit()) {
                 putBoolean("onboarding_completed", true)
-                putString("user_name", userName) // SALVANDO O NOME AQUI
+                putString("user_name", userName)
                 apply()
             }
 

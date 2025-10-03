@@ -3,12 +3,10 @@ package com.example.myapplication
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-// R já está importado implicitamente pelo nome do pacote se for do mesmo módulo.
-// Se R não for encontrado, você pode precisar de:
-// import com.example.myapplication.R
 import com.example.myapplication.adapters.FormulasAdapter
 import com.example.myapplication.models.FormulaX
 import com.example.myapplication.utils.DisciplinaJsonReader
@@ -31,9 +29,12 @@ class FormulasActivity : AppCompatActivity() {
         tvSubtituloFormulas = findViewById(R.id.tv_subtitulo_formulas)
         recyclerView = findViewById(R.id.rv_formulas)
 
-        // Configurar título com o nome da disciplina
+        // --- LÓGICA DE RECEBIMENTO DE DADOS ATUALIZADA ---
+        // Pega os dados que a tela anterior enviou (nome do arquivo e nome da disciplina)
         val nomeDisciplina = intent.getStringExtra("disciplina_nome") ?: "Fórmulas"
-        val disciplinaSlug = intent.getStringExtra("disciplina_slug") ?: ""
+        val nomeArquivoJson = intent.getStringExtra("disciplina_arquivo_json")
+
+        // Define o título da tela
         tvTituloFormulas.text = nomeDisciplina
 
         // Configurar o clique no botão de voltar
@@ -44,17 +45,32 @@ class FormulasActivity : AppCompatActivity() {
         // Configurar RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Carregar e exibir fórmulas
-        carregarFormulas(disciplinaSlug)
+        // Carrega as fórmulas se o nome do arquivo foi recebido com sucesso
+        if (nomeArquivoJson != null) {
+            carregarFormulasDoArquivo(nomeArquivoJson)
+        } else {
+            // Se, por algum motivo, o nome do arquivo não foi passado, mostra um erro e fecha a tela.
+            Toast.makeText(this, "Erro: Arquivo da disciplina não encontrado.", Toast.LENGTH_LONG).show()
+            finish()
+        }
     }
 
-    private fun carregarFormulas(disciplinaSlug: String) {
+    /**
+     * Carrega os dados de uma disciplina a partir de um nome de arquivo JSON específico
+     * e configura o RecyclerView para exibi-los.
+     */
+    private fun carregarFormulasDoArquivo(fileName: String) {
         val disciplinaJsonReader = DisciplinaJsonReader()
-        val formulas = disciplinaJsonReader.getFormulas(this, disciplinaSlug)
+
+        // Usa o reader para carregar o objeto completo da disciplina a partir do nome do arquivo
+        val disciplina = disciplinaJsonReader.loadDisciplina(this, fileName)
+
+        // Pega a lista de fórmulas da disciplina. Se for nula, usa uma lista vazia para evitar crashes.
+        val formulas = disciplina?.formulas ?: emptyList()
 
         // Atualizar o subtítulo com o número de fórmulas
         val numFormulas = formulas.size
-        tvSubtituloFormulas.text = "$numFormulas fórmulas disponíveis"
+        tvSubtituloFormulas.text = if (numFormulas == 1) "1 fórmula disponível" else "$numFormulas fórmulas disponíveis"
 
         // Configurar o adapter com as fórmulas
         // **** MODIFICAÇÃO APLICADA AQUI ****
@@ -62,7 +78,7 @@ class FormulasActivity : AppCompatActivity() {
             // TODO: Implementar o que acontece quando uma fórmula é clicada
             // Por exemplo, abrir um Dialog ou uma nova Activity com os detalhes da fórmula
             // Exemplo de log para testar o clique:
-            // android.util.Log.d("FormulasActivity", "Fórmula clicada: ${formula.name}")
+            android.util.Log.d("FormulasActivity", "Fórmula clicada: ${formula.name}")
         }
         recyclerView.adapter = formulasAdapter
     }
