@@ -12,4 +12,5 @@
     <color name="gray">#808080</color>
     <color name="golden">#B89517</color>
     <color name="silver">#C1C1C1</color>
+    <color name="highlight_color">#FDA901</color>
 </resources>

@@ -52,7 +52,8 @@ class FormulasActivity : AppCompatActivity() {
             carregarFormulasDoArquivo(nomeArquivoJson, formulaFocoNome)
         } else {
             // Se, por algum motivo, o nome do arquivo não foi passado, mostra um erro e fecha a tela.
-            Toast.makeText(this, "Erro: Arquivo da disciplina não encontrado.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Erro: Arquivo da disciplina não encontrado.", Toast.LENGTH_LONG)
+                .show()
             finish()
         }
     }
@@ -73,10 +74,11 @@ class FormulasActivity : AppCompatActivity() {
 
         // Atualizar o subtítulo com o número de fórmulas
         val numFormulas = formulas.size
-        tvSubtituloFormulas.text = if (numFormulas == 1) "1 fórmula disponível" else "$numFormulas fórmulas disponíveis"
+        tvSubtituloFormulas.text =
+            if (numFormulas == 1) "1 fórmula disponível" else "$numFormulas fórmulas disponíveis"
 
         // Configurar o adapter com as fórmulas
-        formulasAdapter = FormulasAdapter(this, formulas) { formula ->
+        formulasAdapter = FormulasAdapter(this, formulas, formulaFocoNome) { formula ->
             // TODO: Implementar o que acontece quando uma fórmula é clicada
             android.util.Log.d("FormulasActivity", "Fórmula clicada: ${formula.name}")
         }
@@ -84,18 +86,47 @@ class FormulasActivity : AppCompatActivity() {
 
         // --- NOVO: Lógica para encontrar e rolar até a fórmula de foco ---
         // Verifica se recebemos um nome de fórmula para focar
-        if (formulaFocoNome != null) {
-            // Encontra o índice (posição) da primeira fórmula na lista cujo nome corresponde
-            // ao que recebemos do Intent. Usamos ignoreCase=true para segurança.
-            val indexParaRolar = formulas.indexOfFirst { it.name.equals(formulaFocoNome, ignoreCase = true) }
+        // Em FormulasActivity.kt, dentro de carregarFormulasDoArquivo()
 
-            // Se o índice for encontrado (ou seja, diferente de -1)
+        // --- LÓGICA DE ROLAGEM CORRIGIDA PARA CENTRALIZAÇÃO ---
+        if (formulaFocoNome != null) {
+            val indexParaRolar =
+                formulas.indexOfFirst { it.name.equals(formulaFocoNome, ignoreCase = true) }
+
             if (indexParaRolar != -1) {
-                // Usamos post para garantir que a rolagem aconteça depois que o RecyclerView
-                // teve tempo de calcular e desenhar seu layout. Isso evita falhas.
                 recyclerView.post {
-                    // Rola a lista para que o item na posição 'indexParaRolar' apareça no topo.
-                    (recyclerView.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(indexParaRolar, 0)
+                    // PASSO 1: Rolar imediatamente para a posição.
+                    // Isso garante que a RecyclerView crie e posicione a view do item na tela.
+                    // O item aparecerá desalinhado (geralmente na parte inferior ou superior).
+                    (recyclerView.layoutManager as? LinearLayoutManager)?.scrollToPosition(
+                        indexParaRolar
+                    )
+
+                    // PASSO 2: Postar uma segunda ação para o ajuste fino.
+                    // Este segundo 'post' garante que a ação do Passo 1 foi concluída e a view existe.
+                    recyclerView.post {
+                        val layoutManager =
+                            recyclerView.layoutManager as? LinearLayoutManager ?: return@post
+                        // Agora, com a view garantidamente na tela, podemos encontrá-la.
+                        val viewDoItem = layoutManager.findViewByPosition(indexParaRolar)
+
+                        if (viewDoItem != null) {
+                            val alturaTela = recyclerView.height
+                            val alturaItem = viewDoItem.height
+
+                            // A posição 'y' do topo do item na tela.
+                            val posicaoAtualDoItem = viewDoItem.top
+
+                            // O offset que queremos para centralizar o item.
+                            val offsetDesejado = (alturaTela / 2) - (alturaItem / 2)
+
+                            // A distância que precisamos rolar para fazer o ajuste.
+                            val distanciaParaRolar = posicaoAtualDoItem - offsetDesejado
+
+                            // Executa a rolagem suave para o ajuste final.
+                            recyclerView.smoothScrollBy(0, distanciaParaRolar, null, 500)
+                        }
+                    }
                 }
             }
         }
