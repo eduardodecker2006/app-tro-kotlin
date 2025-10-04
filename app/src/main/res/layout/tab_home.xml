@@ -48,7 +48,7 @@
                 android:layoutDirection="rtl"
                 app:iconifiedByDefault="false"
                 app:queryHint="Pesquisar conteúdo..."
-                 />
+                />
 
 
             <View
@@ -60,6 +60,9 @@
                 android:id="@+id/recycler_view_results"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingBottom="130dp"
+                android:overScrollMode="ifContentScrolls"
                 tools:itemCount="3"
                 tools:listitem="@layout/item_search_result" />
 

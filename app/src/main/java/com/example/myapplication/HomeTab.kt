@@ -103,20 +103,20 @@ class HomeTab : Fragment() {
 
     /** Configura a RecyclerView e a SearchView para a funcionalidade de busca. */
     private fun setupSearch(view: View) {
-        // Carrega os dados dos arquivos JSON e os transforma para a lista de busca
+        // Carrega os dados dos arquivos JSON
         loadAndTransformContentFromAssets()
 
-        // Configura a lista visual (RecyclerView)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_results)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        // Passa a função de clique para o Adapter
         searchAdapter = SearchAdapter(emptyList()) { clickedItem ->
             navigateToFormulas(clickedItem)
         }
         recyclerView.adapter = searchAdapter
 
-        // Configura a barra de pesquisa (SearchView)
+        // 🔹 Garante que inicia invisível
+        recyclerView.visibility = View.GONE
+
         val searchView = view.findViewById<androidx.appcompat.widget.SearchView>(R.id.search_view)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = false
@@ -174,17 +174,23 @@ class HomeTab : Fragment() {
 
     /** Filtra a lista de busca com base no texto digitado pelo usuário. */
     private fun filterContent(query: String?) {
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.recycler_view_results)
+
         if (query.isNullOrBlank()) {
             searchAdapter.updateList(emptyList())
+            recyclerView?.visibility = View.GONE   // 🔹 esconde completamente
             return
         }
 
-        // A busca é feita no campo otimizado 'searchText' do nosso item simples
         val filteredList = searchableList.filter { item ->
             item.searchText.contains(query.lowercase(Locale.ROOT))
         }
+
         searchAdapter.updateList(filteredList)
+
+        recyclerView?.visibility = if (filteredList.isEmpty()) View.GONE else View.VISIBLE
     }
+
 
     /**
      * Navega para a FormulasActivity quando um item da busca é clicado.
