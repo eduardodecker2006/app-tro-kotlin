@@ -37,8 +37,27 @@ class FormulasAdapter(
     private val onFormulaClick: (FormulaX) -> Unit
 ) : RecyclerView.Adapter<FormulasAdapter.FormulaViewHolder>() {
 
-    // Este conjunto irá guarda o nome da fórmula que já animada.
-    private val animatedItems = mutableSetOf<String>()
+    // Armazena a posição exata da fórmula alvo
+    private val targetPosition = formulas.indexOfFirst {
+        it.name.equals(formulaFocoNome, ignoreCase = true)
+    }
+
+    // ID único para a animação
+    private var animationId = System.currentTimeMillis()
+
+    // Guarda qual ID foi animado
+    private var animatedId: Long? = null
+
+    // Cor de fundo padrão do tema (calculada uma vez)
+    private val defaultBackgroundColor: Int by lazy {
+        val typedValue = TypedValue()
+        context.theme.resolveAttribute(com.google.android.material.R.attr.colorOnSurfaceInverse, typedValue, true)
+        if (typedValue.resourceId != 0) {
+            ContextCompat.getColor(context, typedValue.resourceId)
+        } else {
+            typedValue.data
+        }
+    }
 
     private val htmlKatexTemplate: String by lazy {
         loadHtmlFromAssets(context, "katex_renderer.html")
@@ -221,43 +240,50 @@ class FormulasAdapter(
         val formula = formulas[position]
         holder.bind(formula)
 
-        // Verifica se é o item alvo E SE AINDA NÃO FOI ANIMADO
-        if (formula.name.equals(formulaFocoNome, ignoreCase = true) && !animatedItems.contains(formula.name)) {
-            // Adiciona o nome da fórmula ao conjunto para não animar novamente
-            animatedItems.add(formula.name)
+        // SEMPRE restaura a cor de fundo padrão primeiro (para views recicladas)
+        holder.contentLayout.setBackgroundColor(defaultBackgroundColor)
 
-            // Chama a sua função de animação
-            holder.contentLayout.post {
-                animateHighlight(holder.contentLayout)
-            }
+        // Remove qualquer tag anterior
+        holder.contentLayout.tag = null
+
+        // Verifica se é exatamente a posição alvo
+        if (position == targetPosition && targetPosition != -1 && animatedId == null) {
+            // Marca como animado SINCRONAMENTE
+            animatedId = animationId
+
+            // Tag a view com o ID da animação
+            holder.contentLayout.tag = animationId
+
+            // Anima IMEDIATAMENTE sem post
+            animateHighlight(holder.contentLayout, animationId)
         }
     }
 
-    private fun animateHighlight(contentLayout: LinearLayout) {
+    private fun animateHighlight(contentLayout: LinearLayout, expectedId: Long) {
         try {
-            // Cor de destaque
-            val highlightColor = ContextCompat.getColor(context, R.color.highlight_color) or 0xFF000000.toInt()
-
-            // Cor original do LinearLayout (do atributo do tema)
-            val typedValue = TypedValue()
-            context.theme.resolveAttribute(com.google.android.material.R.attr.colorOnSurfaceInverse, typedValue, true)
-            val defaultColor = if (typedValue.resourceId != 0) {
-                ContextCompat.getColor(context, typedValue.resourceId)
-            } else {
-                typedValue.data
+            // Verifica se a tag ainda corresponde
+            if (contentLayout.tag != expectedId) {
+                return
             }
 
-            // Define a cor inicial
+            val highlightColor = ContextCompat.getColor(context, R.color.highlight_color) or 0xFF000000.toInt()
+
+            // Define a cor de destaque
             contentLayout.setBackgroundColor(highlightColor)
 
-            // Anima de volta para a cor original
+            // Anima de volta para a cor padrão
             contentLayout.postDelayed({
-                val colorAnimator = ValueAnimator.ofObject(ArgbEvaluator(), highlightColor, defaultColor)
-                colorAnimator.duration = 1500
-                colorAnimator.addUpdateListener { animator ->
-                    contentLayout.setBackgroundColor(animator.animatedValue as Int)
+                // Verifica novamente antes de animar
+                if (contentLayout.tag == expectedId) {
+                    val colorAnimator = ValueAnimator.ofObject(ArgbEvaluator(), highlightColor, defaultBackgroundColor)
+                    colorAnimator.duration = 1500
+                    colorAnimator.addUpdateListener { animator ->
+                        if (contentLayout.tag == expectedId) {
+                            contentLayout.setBackgroundColor(animator.animatedValue as Int)
+                        }
+                    }
+                    colorAnimator.start()
                 }
-                colorAnimator.start()
             }, 500)
         } catch (e: Exception) {
             Log.e("FormulasAdapter", "Erro ao animar destaque: ${e.message}", e)
