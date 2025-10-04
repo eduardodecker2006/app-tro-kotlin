@@ -25,24 +25,33 @@ import java.util.Locale
 class HomeTab : Fragment() {
 
     /**
-     * Lista de frases de boas-vindas.
-     * (Fará implementação de frases aleatórias na HT, da pra adicionar o número de string que quiser que vai funcionar :P )
+     * Data class para representar um par de frase + emoji
      */
-    private val entrace_phrase = listOf(
-        "Pronto para aprender algo novo hoje?",
-        "Que tal uma dose de eletrônica hoje?",
-        "Seu próximo conhecimento te espera aqui.",
-        "O mundo da eletrônica te chama!",
-        "Vamos desvendar um mistério da eletrônica?",
-        "Qual conceito vamos dominar hoje?",
-        "Mantenha a mente ligada na eletrônica!",
-        "Hora de energizar seus conhecimentos!",
-        "Conecte-se com o saber da eletrônica."
-    )
+    data class PhrasePair(val phrase: String, val emoji: String)
 
-    /** Lista de emojis pra ficar mais visual */
-    private val emojis_tro = listOf(
-        "💡", "🔋", "🔌", "⚡", "📡", "💻", "🚀", "🤖", "🧠", "💾"
+    /**
+     * Lista de pares de frases de boas-vindas com seus respectivos emojis.
+     * Cada frase tem seu emoji fixo, e um par aleatório é escolhido.
+     */
+    private val phrasePairs = listOf(
+        PhrasePair("Pronto para aprender algo novo hoje?", "💡"),
+        PhrasePair("Que tal uma dose de eletrônica?", "🔋"),
+        PhrasePair("Seu próximo conhecimento te espera aqui.", "🚀"),
+        PhrasePair("O mundo da eletrônica te chama!", "🤖"),
+        PhrasePair("Vamos desvendar um mistério da eletrônica?", "📡"),
+        PhrasePair("Qual conceito vamos dominar hoje?", "🧠"),
+        PhrasePair("Mantenha a mente ligada na eletrônica!", "🔌"),
+        PhrasePair("Hora de energizar seus conhecimentos!", "⚡"),
+        PhrasePair("Conecte-se com o saber da eletrônica.", "📖"),
+        PhrasePair("O tempo passa rápido quando a gente se diverte...", "🤣"),
+        PhrasePair("Quem tem mais, tem 15!", "🏆"),
+        PhrasePair("Preparado para acender ideias hoje?", "✨"),
+        PhrasePair("Cada detalhe aprendido é uma nova conquista.", "🎯"),
+        PhrasePair("A aventura da eletrônica nunca para!", "💪"),
+        PhrasePair("Qual desafio técnico vamos superar agora?", "📝"),
+        PhrasePair("Nunca desligue sua curiosidade!", "🕹️"),
+        PhrasePair("A teoria conecta com a prática aqui.", "📚"),
+        PhrasePair("Aprender também pode ser diversão!", "😄"),
     )
 
     // A lista principal para a UI, contendo apenas os dados simples e pesquisáveis.
@@ -76,10 +85,12 @@ class HomeTab : Fragment() {
         val sharedPreferences =
             requireActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         val userName = sharedPreferences.getString("user_name", "Usuário") ?: "Usuário"
-        val randomPhrase = entrace_phrase.random()
-        val randomEmoji = emojis_tro.random()
-        val greetingPart = "Olá, $userName! $randomEmoji\n"
-        val fullText = greetingPart + randomPhrase
+
+        // Seleciona um par aleatório de frase + emoji
+        val randomPair = phrasePairs.random()
+
+        val greetingPart = "Olá, $userName! ${randomPair.emoji}\n"
+        val fullText = greetingPart + randomPair.phrase
 
         // Aplica a formatação para diminuir o tamanho da segunda linha
         val spannableString = SpannableString(fullText)
