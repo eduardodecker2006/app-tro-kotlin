@@ -30,9 +30,10 @@ class FormulasActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.rv_formulas)
 
         // --- LÓGICA DE RECEBIMENTO DE DADOS ATUALIZADA ---
-        // Pega os dados que a tela anterior enviou (nome do arquivo e nome da disciplina)
         val nomeDisciplina = intent.getStringExtra("disciplina_nome") ?: "Fórmulas"
         val nomeArquivoJson = intent.getStringExtra("disciplina_arquivo_json")
+        // --- NOVO: Recebendo o nome da fórmula específica que deve receber foco ---
+        val formulaFocoNome = intent.getStringExtra("formula_nome_foco")
 
         // Define o título da tela
         tvTituloFormulas.text = nomeDisciplina
@@ -47,7 +48,8 @@ class FormulasActivity : AppCompatActivity() {
 
         // Carrega as fórmulas se o nome do arquivo foi recebido com sucesso
         if (nomeArquivoJson != null) {
-            carregarFormulasDoArquivo(nomeArquivoJson)
+            // --- ALTERADO: Passa o nome da fórmula de foco para a função de carregamento ---
+            carregarFormulasDoArquivo(nomeArquivoJson, formulaFocoNome)
         } else {
             // Se, por algum motivo, o nome do arquivo não foi passado, mostra um erro e fecha a tela.
             Toast.makeText(this, "Erro: Arquivo da disciplina não encontrado.", Toast.LENGTH_LONG).show()
@@ -58,8 +60,9 @@ class FormulasActivity : AppCompatActivity() {
     /**
      * Carrega os dados de uma disciplina a partir de um nome de arquivo JSON específico
      * e configura o RecyclerView para exibi-los.
+     * --- ALTERADO: A assinatura da função agora aceita um segundo parâmetro opcional ---
      */
-    private fun carregarFormulasDoArquivo(fileName: String) {
+    private fun carregarFormulasDoArquivo(fileName: String, formulaFocoNome: String?) {
         val disciplinaJsonReader = DisciplinaJsonReader()
 
         // Usa o reader para carregar o objeto completo da disciplina a partir do nome do arquivo
@@ -73,13 +76,28 @@ class FormulasActivity : AppCompatActivity() {
         tvSubtituloFormulas.text = if (numFormulas == 1) "1 fórmula disponível" else "$numFormulas fórmulas disponíveis"
 
         // Configurar o adapter com as fórmulas
-        // **** MODIFICAÇÃO APLICADA AQUI ****
         formulasAdapter = FormulasAdapter(this, formulas) { formula ->
             // TODO: Implementar o que acontece quando uma fórmula é clicada
-            // Por exemplo, abrir um Dialog ou uma nova Activity com os detalhes da fórmula
-            // Exemplo de log para testar o clique:
             android.util.Log.d("FormulasActivity", "Fórmula clicada: ${formula.name}")
         }
         recyclerView.adapter = formulasAdapter
+
+        // --- NOVO: Lógica para encontrar e rolar até a fórmula de foco ---
+        // Verifica se recebemos um nome de fórmula para focar
+        if (formulaFocoNome != null) {
+            // Encontra o índice (posição) da primeira fórmula na lista cujo nome corresponde
+            // ao que recebemos do Intent. Usamos ignoreCase=true para segurança.
+            val indexParaRolar = formulas.indexOfFirst { it.name.equals(formulaFocoNome, ignoreCase = true) }
+
+            // Se o índice for encontrado (ou seja, diferente de -1)
+            if (indexParaRolar != -1) {
+                // Usamos post para garantir que a rolagem aconteça depois que o RecyclerView
+                // teve tempo de calcular e desenhar seu layout. Isso evita falhas.
+                recyclerView.post {
+                    // Rola a lista para que o item na posição 'indexParaRolar' apareça no topo.
+                    (recyclerView.layoutManager as? LinearLayoutManager)?.scrollToPositionWithOffset(indexParaRolar, 0)
+                }
+            }
+        }
     }
 }

@@ -196,6 +196,7 @@ class HomeTab : Fragment() {
             val intent = Intent(requireContext(), FormulasActivity::class.java).apply {
                 putExtra("disciplina_arquivo_json", item.sourceFile)
                 putExtra("disciplina_nome", item.description)
+                putExtra("formula_nome_foco", item.title)
             }
             startActivity(intent)
         } catch (e: Exception) {
