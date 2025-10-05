@@ -1,0 +1,215 @@
+{
+    "name_disc": "Instrumentação industrial",
+    "id": 12,
+    "status": "ativo",
+    "slug": "instrumentacao-industrial",
+    "parents": ["instrumentacao-industrial"],
+    "needs": [],
+    "semmester": 7,
+    "course": "eletrônica",
+    "period": "integrado",
+    "description": "Formulas relacionadas a resultado de medição, incerteza de medição, soma das incertezas, desvio padrão, erro de carregamento e ponte de wheatstone",
+    "content": "A disciplina de Instrumentação Industrial aborda o estudo das tecnologia para medir, controlar e automatizar processos industriais.",
+    "obs": "",
+    "chapters": ["resultado da medição","incerteza de medição","soma das incertezas","desvio padrão","erro de carregamento","ponte de wheatstone(equilíbrio)","resistência desconhecida na ponte de wheatstone (equilíbrio)","tensão de saída na ponte de wheatstone (desequilíbrio)"],
+    "formulas": [
+        {
+            "name": "Representação do resultado da medição",
+            "description": "Forma correta de representar o valor da medição.",
+            "latex": ["RM = RB \\pm IM \\ (GM)"],
+            "constants": null,
+            "variables": {
+                "RM": "Resultado de medição, valor final com incerteza",
+                "RB": "Resultado base, valor teórico da medição",
+                "IM": "Incerteza de medição, incerteza gerada pelo instrumento que fez a medida",
+                "GM": "Grandeza medida (unidade da grandeza medida)"
+            }
+        },
+        {
+            "name": "Incerteza de medição",
+            "description": "Formula para calcular a incerteza associada à resolução do instrumento de medição.",
+            "latex": ["IM = \\pm \\dfrac{MVL}{2}"],
+            "constants": null,
+            "variables": {
+                "IM": "Incerteza de medição, incerteza gerada pelo instrumento que fez a medida",
+                "MVL": "Menor valor de leitura do instrumento (resolução do instrumento)"
+            }
+        },
+        {
+            "name": "Incerteza total",
+            "description": "Formula para calcular a soma de diferentes incertezas.",
+            "latex": ["IncertezaTotal = \\pm \\sqrt{(Incerteza_1)^2 + (Incerteza_2)^2 + \\dots + (Incerteza_n)^2}"],
+            "constants": null,
+            "variables": {
+                "Incerteza Total": "Soma de todas as incertezas (grandeza varia dependendo do que está sendo medido)",
+                "Incerteza 1": "Primeira incerteza (grandeza varia dependendo do que está sendo medido)",
+                "Incerteza 2": "Segunda incerteza (grandeza varia dependendo do que está sendo medido)",
+                "Incerteza n": "Uma incerteza qualquer (grandeza varia dependendo do que está sendo medido)"
+            }
+        },
+        {
+            "name": "Desvio padrão",
+            "description": "Mede a dispersão dos valores de um conjunto de dados em relação à média.",
+            "latex": ["\\sigma = \\sqrt{\\dfrac{\\sum (x_i - \\mu)^2}{N}}"],
+            "constants": null,
+            "variables": {
+                "σ": "Desvio padrão",
+                "∑": "Somatório dos elementos",
+                "xi": "Valor individual no conjunto de dados",
+                "μ": "Média aritmética dos valores do conjunto",
+                "N": "Quantidade total de valores do conjunto"
+            }
+        },
+        {
+            "name": "Erro de carregamento",
+            "description": "Calcula o erro causado pela inserção do instrumento de medição no sistema.",
+            "latex": ["Erro_{carregamento} = E_{th} - V_l = E_{th} \\times \\left(1 - \\dfrac{Z_l}{Z_{th} + Z_l}\\right)"],
+            "constants": null,
+            "variables": {
+                "Erro de carregamento": "Diferença entre a tensão real do sistema e da tensão medida(V)",
+                "Eth": "Tensão de thevenin (V)",
+                "Zth": "Resistência de thevenin (Ω)",
+                "Vl": "Tensão na carga (V)",
+                "Zl": "Resistência da carga (Ω)"
+            }
+        },
+        {
+            "name": "Ponte de wheatstone(equilíbrio)",
+            "description": "Demonstra a relação entre os resistores em uma ponte de wheatstone (equilíbrio).",
+            "latex": ["\\frac{R_1}{R_3} = \\frac{R_2}{R_x}"],
+            "constants": null,
+            "variables": {
+                "R1": "Resistor 1 (Ω)",
+                "R2": "Resistor 2 (Ω)",
+                "R3": "Resistor 3 (Ω)",
+                "Rx": "Resistor com resistência desconhecida (Ω)"
+            }
+        },
+        {
+            "name": "Resistência desconhecida na ponte de wheatstone (equilíbrio)",
+            "description": "Fórmula para calcular Rx em uma ponte de wheatstone (equilíbrio).",
+            "latex": ["R_x = R_2 \\cdot \\frac{R_3}{R_1}"],
+            "constants": null,
+            "variables": {
+                "R1": "Resistor 1 (Ω)",
+                "R2": "Resistor 2 (Ω)",
+                "R3": "Resistor 3 (Ω)",
+                "Rx": "Resistor com resistência desconhecida (Ω)"
+            }
+        },
+        {
+            "name": "Tensão de saída na ponte de wheatstone (desequilíbrio)",
+            "description": "Fórmula para calcular Vout em uma ponte de wheatstone (desequilíbrio)",
+            "latex": ["V_{out} = V_{in} \\cdot \\left( \\frac{R_3}{R_3 + R_x} - \\frac{R_2}{R_1 + R_2} \\right)"],
+            "constants": null,
+            "variables": {
+                "Vout": "Tensão de saída (V)",
+                "Vin": "Tensão de entrada (V)",
+                "R1": "Resistor 1 (Ω)",
+                "R2": "Resistor 2 (Ω)",
+                "R3": "Resistor 3 (Ω)",
+                "Rx": "Resistor com resistência desconhecida (Ω)"
+            }
+        }
+    ],
+    "supervisors": [
+        {
+            "name": "Fabricio Neitzke Ferreira",
+            "role": "Professor",
+            "degree": "Doutor",
+            "university": "Universidade Federal de Pelotas",
+            "campus": "Campus Pelotas",
+            "course": "Curso Técnico em Eletrônica",
+            "email": "fabricioferreira@ifsul.edu.br",
+            "telephone": null,
+            "github": null,
+            "instagram": null,
+            "youtube": null,
+            "whatsapp": null
+        }
+    ],
+    "references": [
+        {
+            "name": "BOYLESTAD, Robert L. Introdução a Análise de Circuitos. Ed. Pearson Prentice Education, 2007.",
+            "url": null,
+            "description": null
+        }
+    ],
+    "images": [
+        {
+            "name": "",
+            "id": null,
+            "alt": "",
+            "url": "",
+            "source": "",
+            "author": ""
+        }
+    ],
+    "tags": ["instrumentação industrial", "instrumentação", "industrial"],
+    "alias": ["instrumentação industrial","instrumentação","industrial","instrumentaçao","instrumentacao"],
+    "articleWriters": [
+        {
+            "summary": [
+                {
+                    "name": "",
+                    "roles": [],
+                    "email": null,
+                    "github": null,
+                    "date": null
+                }
+            ],
+            "formulas": [
+                {
+                    "name": "Eduardo Decker",
+                    "roles": ["Desenvolvedor","Estudante de Eletrônica"],
+                    "email": null,
+                    "github": null,
+                    "date": null
+                }
+            ],
+            "json": [
+                {
+                    "name": "Eduardo Decker",
+                    "roles": ["Desenvolvedor","Estudante de Eletrônica"],
+                    "email": null,
+                    "github": null,
+                    "date": null
+                }
+            ]
+        }
+    ],
+    "files": [
+        {
+            "name": "",
+            "id": null,
+            "description": "",
+            "url": "",
+            "fileId": "",
+            "type": "",
+            "source": "",
+            "author": "",
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null
+        }
+    ],
+    "embededVideos": [
+        {
+            "name": "",
+            "id": null,
+            "description": "",
+            "url": "",
+            "type": "",
+            "source": "",
+            "author": "",
+            "suggestedBy": "",
+            "created_at": null,
+            "updated_at": null,
+            "deleted_at": null
+        }
+    ],
+    "created_at": null,
+    "updated_at": null,
+    "deleted_at": null,
+    "fileVersion": 2
+}
