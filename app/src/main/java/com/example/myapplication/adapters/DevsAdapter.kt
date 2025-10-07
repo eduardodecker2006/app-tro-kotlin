@@ -17,6 +17,8 @@ import com.example.myapplication.models.Desenvolvedor
 interface DevActionsListener {
     fun onEmailClick(email: String)
     fun onGithubClick(githubUrl: String)
+    fun onLinkedinClick(linkedinUrl: String)
+    fun onInstagramClick(instagramUrl: String)
 }
 
 class DesenvolvedorAdapter(
@@ -52,6 +54,8 @@ class DesenvolvedorAdapter(
         private val tvFuncao: TextView = itemView.findViewById(R.id.tv_desenvolvedor_funcao)
         private val btnEmail: ImageButton = itemView.findViewById(R.id.btn_desenvolvedor_email)
         private val btnGithub: ImageButton = itemView.findViewById(R.id.btn_desenvolvedor_github)
+        private val btnLinkedin: ImageButton = itemView.findViewById(R.id.btn_desenvolvedor_linkedin)
+        private val btnInstagram: ImageButton = itemView.findViewById(R.id.btn_desenvolvedor_instagram)
 
         fun bind(desenvolvedor: Desenvolvedor, listener: DevActionsListener?) {
             // LOG
@@ -107,7 +111,9 @@ class DesenvolvedorAdapter(
                 imgFoto.setImageResource(placeholderDrawable)
             }
 
-            // Configuração dos botões de email e github
+            // Configuração dos botões
+
+            // Botão do Email
             if (desenvolvedor.email != null && desenvolvedor.email.isNotBlank()) {
                 btnEmail.visibility = View.VISIBLE
                 btnEmail.setOnClickListener {
@@ -118,11 +124,28 @@ class DesenvolvedorAdapter(
                 btnEmail.visibility = View.GONE
             }
 
+            // Botão do GitHub
             if (desenvolvedor.githubUrl != null) {
                 btnGithub.visibility = View.VISIBLE
                 btnGithub.setOnClickListener { listener?.onGithubClick(desenvolvedor.githubUrl) }
             } else {
                 btnGithub.visibility = View.GONE
+            }
+
+            // Botão do LinkedIn
+            if (desenvolvedor.linkedinUrl != null) {
+                btnLinkedin.visibility = View.VISIBLE
+                btnLinkedin.setOnClickListener { listener?.onLinkedinClick(desenvolvedor.linkedinUrl) }
+            } else {
+                btnLinkedin.visibility = View.GONE
+            }
+
+            // Botão do Instagram
+            if (desenvolvedor.instagramUrl != null) {
+                btnInstagram.visibility = View.VISIBLE
+                btnInstagram.setOnClickListener { listener?.onInstagramClick(desenvolvedor.instagramUrl) }
+            } else {
+                btnInstagram.visibility = View.GONE
             }
         }
     }
