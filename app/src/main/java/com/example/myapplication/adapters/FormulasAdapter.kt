@@ -112,7 +112,7 @@ class FormulasAdapter(
         private val constantsHeaderTextView: TextView = view.findViewById(R.id.tv_constants_header)
         private val constantsListTextView: TextView = view.findViewById(R.id.tv_constants_list)
 
-        private var isExpanded = false
+        // REMOVIDO: private var isExpanded = false
         private var isFormulaRendered = false
         private var isWebViewSetupDone = false
         lateinit var currentFormula: FormulaX
@@ -147,16 +147,21 @@ class FormulasAdapter(
             val constantsText = formatTermsForDisplay(formula.constants)
             constantsListTextView.text = constantsText.ifBlank { "" }
             isFormulaRendered = false
-            updateExpandCollapseUI()
+
+            // MUDANÇA: Atualiza UI baseado no estado da fórmula
+            updateExpandCollapseUI(formula)
+
+            // MUDANÇA: Altera o listener para modificar o estado da fórmula e notificar
             cardView.setOnClickListener {
-                isExpanded = !isExpanded
-                updateExpandCollapseUI()
+                formula.isExpanded = !formula.isExpanded
+                notifyItemChanged(adapterPosition)
                 onFormulaClick(formula)
             }
         }
 
-        fun updateExpandCollapseUI() {
-            if (isExpanded) {
+        // MUDANÇA: Função agora recebe a fórmula como parâmetro
+        fun updateExpandCollapseUI(formula: FormulaX) {
+            if (formula.isExpanded) {
                 expandableContentLayout.visibility = View.VISIBLE
                 expandStatusTextView.text = context.getString(R.string.collapse)
                 expandStatusTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0)

@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# MANUAL:
+/.idea/deploymentTargetSelector.xml
