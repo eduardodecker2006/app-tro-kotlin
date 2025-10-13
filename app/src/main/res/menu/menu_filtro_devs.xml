@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_filtro_todos"
+        android:title="Todos" />
+    <item
+        android:id="@+id/menu_filtro_alunos"
+        android:title="Alunos" />
+    <item
+        android:id="@+id/menu_filtro_professores"
+        android:title="Professores" />
+</menu>
