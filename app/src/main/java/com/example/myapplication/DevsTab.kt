@@ -115,7 +115,7 @@ class DevsTab : Fragment(), DevActionsListener {
             Desenvolvedor("1", "Alexandre Nunes da Silva Filho", "ic_dev1", "Desenvolvedor Full-Stack", TipoDesenvolvedor.ALUNO, "xandyhsilvah@gmail.com", "https://github.com/ale1zin", "https://www.linkedin.com/in/ale1zin/", "https://www.instagram.com/ale1zin/"),
             Desenvolvedor("2", "Carlos Alexandre Dutra Volz", "ic_dev2", "Desenvolvedor Full-Stack", TipoDesenvolvedor.ALUNO, null, "https://github.com/Carlosvolz", null, "https://www.instagram.com/carlos__volz/"),
             Desenvolvedor("3", "Eduardo Peixoto Alves Decker", "ic_dev3", "Desenvolvedor Full-Stack", TipoDesenvolvedor.ALUNO, null, "https://github.com/eduardodecker2006", null, "https://www.instagram.com/eduardopeixotoalves/"),
-            Desenvolvedor("4", "Yuri Andrade dos Anjos", null, "Desenvolvedor Full-Stack", TipoDesenvolvedor.ALUNO, "yurixbroficial@gmail.com", "https://github.com/YuriXbr", "https://www.linkedin.com/in/yuri-andrade-dos-anjos-08a98027a/", null),
+            Desenvolvedor("4", "Yuri Andrade dos Anjos", "ic_dev4", "Desenvolvedor Full-Stack", TipoDesenvolvedor.ALUNO, "yurixbroficial@gmail.com", "https://github.com/YuriXbr", "https://www.linkedin.com/in/yuri-andrade-dos-anjos-08a98027a/", null),
             Desenvolvedor("5", "Fabricio Neitzke Ferreira", "ic_devt1", "Professor Orientador", TipoDesenvolvedor.PROFESSOR, "fabricioferreira@ifsul.edu.br", null, null, null),
             Desenvolvedor("6", "Rodrigo Nuevo Lellis", "ic_devt2", "Professor Orientador", TipoDesenvolvedor.PROFESSOR, "rodrigolellis@ifsul.edu.br", null, null, "https://www.instagram.com/rodrigonuevolellis/")
         )
