@@ -36,25 +36,13 @@ class MainActivity : AppCompatActivity() {
         // Isso também define os títulos das abas
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             when (position) {
-                0 -> {
-                    tab.text = "Início" // Título do "botão" da 1° aba
-                    tab.icon = ContextCompat.getDrawable(this, R.drawable.ic_home) // Ícone home
-                }
-                1 -> {
-                    tab.text = "Disciplinas" // Título do "botão" da 2° aba
-                    tab.icon = ContextCompat.getDrawable(this, R.drawable.ic_subjetcs) // Defina o ícone
-                }
-                2 -> {
-                    tab.text = "Código de Cores" // Título do "botão" da 3° aba
-                    tab.icon = ContextCompat.getDrawable(this, R.drawable.ic_resistor) // Defina o ícone
-                }
-                3 -> {
-                    tab.text = "Desenvolvedores" // Título do "botão" da 4° aba
-                    tab.icon = ContextCompat.getDrawable(this, R.drawable.ic_devs) // Defina o ícone
-                }
-
+                0 -> { tab.text = "Início"; tab.icon = ContextCompat.getDrawable(this, R.drawable.ic_home) }
+                1 -> { tab.text = "Disciplinas"; tab.icon = ContextCompat.getDrawable(this, R.drawable.ic_subjetcs) }
+                2 -> { tab.text = "Resistores"; tab.icon = ContextCompat.getDrawable(this, R.drawable.ic_resistor) }
+                3 -> { tab.text = "Devs"; tab.icon = ContextCompat.getDrawable(this, R.drawable.ic_devs) }
             }
-        }.attach() // Não se esqueça de chamar attach()!
+        }.attach()
+
 
         // Código para ajustar o padding para barras do sistema (opcional, pode manter)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

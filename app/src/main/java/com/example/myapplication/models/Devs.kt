@@ -7,8 +7,10 @@ data class Desenvolvedor(
     val funcao: String,
     val tipo: TipoDesenvolvedor, // Para filtrar entre Aluno e Professor
     val email: String?,
-    val githubUrl: String?
-    // Adicione mais campos se necessário (LinkedIn, etc.)
+    val githubUrl: String?,
+    val linkedinUrl: String?,
+    val instagramUrl: String?,
+    // Adicione mais campos se necessário (Site, etc.)
 )
 
 enum class TipoDesenvolvedor {

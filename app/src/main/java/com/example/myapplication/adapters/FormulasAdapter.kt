@@ -1,5 +1,7 @@
 package com.example.myapplication.adapters
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
@@ -20,10 +22,10 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
-import com.example.myapplication.models.Constants
 import com.example.myapplication.models.FormulaX
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -31,8 +33,31 @@ import java.io.InputStreamReader
 class FormulasAdapter(
     private val context: Context,
     private val formulas: List<FormulaX>,
+    private val formulaFocoNome: String?,
     private val onFormulaClick: (FormulaX) -> Unit
 ) : RecyclerView.Adapter<FormulasAdapter.FormulaViewHolder>() {
+
+    // Armazena a posição exata da fórmula alvo
+    private val targetPosition = formulas.indexOfFirst {
+        it.name.equals(formulaFocoNome, ignoreCase = true)
+    }
+
+    // ID único para a animação
+    private var animationId = System.currentTimeMillis()
+
+    // Guarda qual ID foi animado
+    private var animatedId: Long? = null
+
+    // Cor de fundo padrão do tema (calculada uma vez)
+    private val defaultBackgroundColor: Int by lazy {
+        val typedValue = TypedValue()
+        context.theme.resolveAttribute(com.google.android.material.R.attr.colorOnSurfaceInverse, typedValue, true)
+        if (typedValue.resourceId != 0) {
+            ContextCompat.getColor(context, typedValue.resourceId)
+        } else {
+            typedValue.data
+        }
+    }
 
     private val htmlKatexTemplate: String by lazy {
         loadHtmlFromAssets(context, "katex_renderer.html")
@@ -65,56 +90,44 @@ class FormulasAdapter(
             Log.e("FormulasAdapter", "Erro ao obter textColorPrimary: ${e.message}")
             val nightMode = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
             when (nightMode) {
-                Configuration.UI_MODE_NIGHT_YES -> "#FFFFFF" // Branco para modo noturno
-                Configuration.UI_MODE_NIGHT_NO -> "#000000"  // Preto para modo claro
+                Configuration.UI_MODE_NIGHT_YES -> "#FFFFFF"
+                Configuration.UI_MODE_NIGHT_NO -> "#000000"
                 else -> "#000000"
             }
         }
     }
 
     inner class FormulaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val cardView: CardView = view as CardView
+        val contentLayout: LinearLayout = view.findViewById<LinearLayout>(R.id.layout_expandable_content).parent as LinearLayout
         val formulaName: TextView = view.findViewById(R.id.tv_formula_name)
         val formulaDescription: TextView = view.findViewById(R.id.tv_formula_description)
         val formulaWebView: WebView = view.findViewById(R.id.webview_latex_formula)
-        val container: View = itemView
 
         private val expandableContentLayout: LinearLayout = view.findViewById(R.id.layout_expandable_content)
         private val expandStatusTextView: TextView = view.findViewById(R.id.tv_expand_status)
-
-        // Novas Views para Variáveis e Constantes
         private val variablesHeaderTextView: TextView = view.findViewById(R.id.tv_variables_header)
         private val variablesListTextView: TextView = view.findViewById(R.id.tv_variables_list)
         private val separatorView: View = view.findViewById(R.id.separator_variables_constants)
         private val constantsHeaderTextView: TextView = view.findViewById(R.id.tv_constants_header)
         private val constantsListTextView: TextView = view.findViewById(R.id.tv_constants_list)
-        // Removido: val formulaVariablesDisplayTextView
 
-        private var isExpanded = false
+        // REMOVIDO: private var isExpanded = false
         private var isFormulaRendered = false
         private var isWebViewSetupDone = false
-        private lateinit var currentFormula: FormulaX
-
-
-        init {
-            // A inicialização do WebView agora é feita condicionalmente no bind
-            // para garantir que currentFormula esteja disponível.
-        }
+        lateinit var currentFormula: FormulaX
 
         @SuppressLint("SetJavaScriptEnabled")
-        private fun setupWebViewDefaults(webView: WebView) {
+        fun setupWebViewDefaults(webView: WebView) {
             if (isWebViewSetupDone) return
             webView.settings.javaScriptEnabled = true
             webView.settings.domStorageEnabled = true
             webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
-            webView.setBackgroundColor(0x00000000) // Transparente
-
+            webView.setBackgroundColor(0x00000000)
             webView.webChromeClient = object : WebChromeClient() {
                 override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
                     consoleMessage?.let {
-                        Log.d(
-                            "KaTeX_WebView_JS",
-                            "JS Console: \"${it.message()}\" -- (Source: ${it.sourceId()}, Line: ${it.lineNumber()})"
-                        )
+                        Log.d("KaTeX_WebView_JS", "JS Console: \"${it.message()}\" -- (Source: ${it.sourceId()}, Line: ${it.lineNumber()})")
                     }
                     return true
                 }
@@ -123,53 +136,35 @@ class FormulasAdapter(
         }
 
         fun bind(formula: FormulaX) {
-            currentFormula = formula // Armazena a fórmula atual para uso no listener
+            currentFormula = formula
             formulaName.text = formula.name
             formulaDescription.text = formula.description
-
-            // Inicializar e configurar o WebView aqui, pois precisamos de 'formula' para renderizar
-            if (!isWebViewSetupDone) { // Configura apenas uma vez
+            if (!isWebViewSetupDone) {
                 setupWebViewDefaults(formulaWebView)
             }
-
-            // Lógica para Variáveis
             val variablesText = formatTermsForDisplay(formula.variables)
-            if (variablesText.isNotBlank()) {
-                variablesListTextView.text = variablesText
-            } else {
-                variablesListTextView.text = "" // Limpar para garantir
-            }
-
-            // Lógica para Constantes
+            variablesListTextView.text = variablesText.ifBlank { "" }
             val constantsText = formatTermsForDisplay(formula.constants)
-            if (constantsText.isNotBlank()) {
-                constantsListTextView.text = constantsText
-            } else {
-                constantsListTextView.text = "" // Limpar para garantir
-            }
+            constantsListTextView.text = constantsText.ifBlank { "" }
+            isFormulaRendered = false
 
-            isFormulaRendered = false // Resetar o status de renderização para cada bind
-            updateExpandCollapseUI() // Atualiza a UI com base no estado de expansão e conteúdo
+            // MUDANÇA: Atualiza UI baseado no estado da fórmula
+            updateExpandCollapseUI(formula)
 
-            container.setOnClickListener {
-                isExpanded = !isExpanded
-                updateExpandCollapseUI() // Atualiza a UI imediatamente ao clicar
-                onFormulaClick(formula) // Notifica o click
+            // MUDANÇA: Altera o listener para modificar o estado da fórmula e notificar
+            cardView.setOnClickListener {
+                formula.isExpanded = !formula.isExpanded
+                notifyItemChanged(adapterPosition)
+                onFormulaClick(formula)
             }
         }
 
-        private fun updateExpandCollapseUI() {
-            if (isExpanded) {
+        // MUDANÇA: Função agora recebe a fórmula como parâmetro
+        fun updateExpandCollapseUI(formula: FormulaX) {
+            if (formula.isExpanded) {
                 expandableContentLayout.visibility = View.VISIBLE
                 expandStatusTextView.text = context.getString(R.string.collapse)
-                expandStatusTextView.setCompoundDrawablesWithIntrinsicBounds(
-                    0,
-                    0,
-                    R.drawable.ic_arrow_up,
-                    0
-                )
-
-                // Visibilidade do WebView
+                expandStatusTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_up, 0)
                 if (currentFormula.latex.isNotEmpty()) {
                     formulaWebView.visibility = View.VISIBLE
                     if (!isFormulaRendered) {
@@ -178,31 +173,17 @@ class FormulasAdapter(
                 } else {
                     formulaWebView.visibility = View.GONE
                 }
-
-                // Visibilidade das Variáveis
                 val variablesPresent = variablesListTextView.text.isNotBlank()
                 variablesHeaderTextView.visibility = if (variablesPresent) View.VISIBLE else View.GONE
                 variablesListTextView.visibility = if (variablesPresent) View.VISIBLE else View.GONE
-
-                // Visibilidade das Constantes
                 val constantsPresent = constantsListTextView.text.isNotBlank()
                 constantsHeaderTextView.visibility = if (constantsPresent) View.VISIBLE else View.GONE
                 constantsListTextView.visibility = if (constantsPresent) View.VISIBLE else View.GONE
-
-                // Visibilidade do Separador
                 separatorView.visibility = if (variablesPresent && constantsPresent) View.VISIBLE else View.GONE
-
             } else {
                 expandableContentLayout.visibility = View.GONE
                 expandStatusTextView.text = context.getString(R.string.expand)
-                expandStatusTextView.setCompoundDrawablesWithIntrinsicBounds(
-                    0,
-                    0,
-                    R.drawable.ic_arrow_down,
-                    0
-                )
-                // Não é estritamente necessário esconder os filhos aqui, pois o pai já está GONE,
-                // mas para garantir o estado, especialmente do WebView:
+                expandStatusTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0)
                 formulaWebView.visibility = View.GONE
                 variablesHeaderTextView.visibility = View.GONE
                 variablesListTextView.visibility = View.GONE
@@ -220,12 +201,7 @@ class FormulasAdapter(
                 }
                 val start = builder.length
                 builder.append("$symbol: ")
-                builder.setSpan(
-                    StyleSpan(Typeface.BOLD),
-                    start,
-                    builder.length,
-                    SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
+                builder.setSpan(StyleSpan(Typeface.BOLD), start, builder.length, SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE)
                 builder.append(description)
             }
             return builder
@@ -237,14 +213,9 @@ class FormulasAdapter(
                     super.onPageFinished(view, url)
                     if (formula.latex.isNotEmpty()) {
                         val latexToRender = formula.latex.joinToString(" \\\\\\\\ ")
-                        val escapedLatex = latexToRender
-                            .replace("\\", "\\\\")
-                            .replace("'", "\\'")
-                            .replace("\"", "\\\"")
-                            .replace("\n", "\\n")
+                        val escapedLatex = latexToRender.replace("\\", "\\\\").replace("'", "\\'").replace("\"", "\\\"").replace("\n", "\\n")
                         val formulaTextColor = this@FormulasAdapter.getTextColorPrimaryHex()
-                        val jsCommand =
-                            "javascript:clearFormula(); setPageTextColor('${formulaTextColor}'); displayFormula('${escapedLatex}');"
+                        val jsCommand = "javascript:clearFormula(); setPageTextColor('${formulaTextColor}'); displayFormula('${escapedLatex}');"
                         Log.d("KaTeX_JS_Command", "Executando JS: $jsCommand")
                         view?.evaluateJavascript(jsCommand, null)
                         isFormulaRendered = true
@@ -253,30 +224,15 @@ class FormulasAdapter(
                         isFormulaRendered = false
                     }
                 }
-
-                override fun onReceivedError(
-                    view: WebView?,
-                    request: WebResourceRequest?,
-                    error: WebResourceError?
-                ) {
+                override fun onReceivedError(view: WebView?, request: WebResourceRequest?, error: WebResourceError?) {
                     super.onReceivedError(view, request, error)
-                    val errorDescription = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                        "${error?.errorCode} ${error?.description}"
-                    } else {
-                        error?.description ?: "Unknown error"
-                    }
+                    val errorDescription = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) "${error?.errorCode} ${error?.description}" else error?.description ?: "Unknown error"
                     val urlString = request?.url?.toString() ?: "Unknown URL"
                     Log.e("KaTeX_WebView_Error", "Erro ao carregar WebView ($urlString): $errorDescription")
                     isFormulaRendered = false
                 }
             }
-            formulaWebView.loadDataWithBaseURL(
-                "file:///android_asset/",
-                htmlKatexTemplate,
-                "text/html",
-                "UTF-8",
-                null
-            )
+            formulaWebView.loadDataWithBaseURL("file:///android_asset/", htmlKatexTemplate, "text/html", "UTF-8", null)
         }
     }
 
@@ -288,8 +244,56 @@ class FormulasAdapter(
     override fun onBindViewHolder(holder: FormulaViewHolder, position: Int) {
         val formula = formulas[position]
         holder.bind(formula)
+
+        // SEMPRE restaura a cor de fundo padrão primeiro (para views recicladas)
+        holder.contentLayout.setBackgroundColor(defaultBackgroundColor)
+
+        // Remove qualquer tag anterior
+        holder.contentLayout.tag = null
+
+        // Verifica se é exatamente a posição alvo
+        if (position == targetPosition && targetPosition != -1 && animatedId == null) {
+            // Marca como animado SINCRONAMENTE
+            animatedId = animationId
+
+            // Tag a view com o ID da animação
+            holder.contentLayout.tag = animationId
+
+            // Anima IMEDIATAMENTE sem post
+            animateHighlight(holder.contentLayout, animationId)
+        }
+    }
+
+    private fun animateHighlight(contentLayout: LinearLayout, expectedId: Long) {
+        try {
+            // Verifica se a tag ainda corresponde
+            if (contentLayout.tag != expectedId) {
+                return
+            }
+
+            val highlightColor = ContextCompat.getColor(context, R.color.highlight_color) or 0xFF000000.toInt()
+
+            // Define a cor de destaque
+            contentLayout.setBackgroundColor(highlightColor)
+
+            // Anima de volta para a cor padrão
+            contentLayout.postDelayed({
+                // Verifica novamente antes de animar
+                if (contentLayout.tag == expectedId) {
+                    val colorAnimator = ValueAnimator.ofObject(ArgbEvaluator(), highlightColor, defaultBackgroundColor)
+                    colorAnimator.duration = 1500
+                    colorAnimator.addUpdateListener { animator ->
+                        if (contentLayout.tag == expectedId) {
+                            contentLayout.setBackgroundColor(animator.animatedValue as Int)
+                        }
+                    }
+                    colorAnimator.start()
+                }
+            }, 500)
+        } catch (e: Exception) {
+            Log.e("FormulasAdapter", "Erro ao animar destaque: ${e.message}", e)
+        }
     }
 
     override fun getItemCount() = formulas.size
 }
-

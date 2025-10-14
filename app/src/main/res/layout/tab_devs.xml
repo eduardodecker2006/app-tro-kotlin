@@ -5,53 +5,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".DevsTab"> <!-- Atualize se o nome do seu Fragment for diferente -->
+    tools:context=".DevsTab">
 
-    <!-- Container para os botões de filtro -->
     <LinearLayout
-        android:id="@+id/layout_filtros_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:gravity="center_vertical">
+        android:padding="8dp"
+        android:gravity="center">
 
+        <!-- Botão Dropdown de Filtros -->
         <Button
-            android:id="@+id/btn_filtro_todos"
-            style="?attr/materialButtonOutlinedStyle"
+            android:id="@+id/btn_filtro_dropdown"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
             android:layout_weight="1"
+            android:layout_marginEnd="8dp"
             android:text="Todos"
             android:textColor="?android:attr/textColorPrimary"
-            android:textSize="12sp" />
+            android:backgroundTint="?attr/colorOnSurfaceInverse"
+            android:drawableEnd="@android:drawable/arrow_down_float"
+            android:drawableTint="?android:attr/textColorPrimary"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
+        <!-- Botão Colaboradores -->
         <Button
-            android:id="@+id/btn_filtro_alunos"
-            style="?attr/materialButtonOutlinedStyle"
+            android:id="@+id/btn_colaboradores"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:text="Alunos"
+            android:text="Colaboradores"
             android:textColor="?android:attr/textColorPrimary"
-            android:textSize="12sp" />
+            android:backgroundTint="?attr/colorOnSurfaceInverse"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
-        <Button
-            android:id="@+id/btn_filtro_professores"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_weight="1"
-            android:text="Professores"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="12sp" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -63,6 +50,6 @@
         android:paddingEnd="8dp"
         android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_desenvolvedor" /> <!-- tools:listitem é para preview no editor -->
+        tools:listitem="@layout/item_devs" /> <!-- tools:listitem é para preview no editor -->
 
 </LinearLayout>
