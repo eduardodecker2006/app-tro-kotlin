@@ -20,6 +20,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.ImageButton // <-- IMPORTAÇÃO NECESSÁRIA
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -27,6 +28,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.models.FormulaX
+import com.example.myapplication.utils.FavoritesManager // <-- IMPORTAÇÃO NECESSÁRIA
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -37,18 +39,16 @@ class FormulasAdapter(
     private val onFormulaClick: (FormulaX) -> Unit
 ) : RecyclerView.Adapter<FormulasAdapter.FormulaViewHolder>() {
 
+
     // Armazena a posição exata da fórmula alvo
     private val targetPosition = formulas.indexOfFirst {
         it.name.equals(formulaFocoNome, ignoreCase = true)
     }
-
     // ID único para a animação
     private var animationId = System.currentTimeMillis()
-
     // Guarda qual ID foi animado
     private var animatedId: Long? = null
 
-    // Cor de fundo padrão do tema (calculada uma vez)
     private val defaultBackgroundColor: Int by lazy {
         val typedValue = TypedValue()
         context.theme.resolveAttribute(com.google.android.material.R.attr.colorOnSurfaceInverse, typedValue, true)
@@ -58,7 +58,6 @@ class FormulasAdapter(
             typedValue.data
         }
     }
-
     private val htmlKatexTemplate: String by lazy {
         loadHtmlFromAssets(context, "katex_renderer.html")
     }
@@ -97,22 +96,25 @@ class FormulasAdapter(
         }
     }
 
+
     inner class FormulaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+        val favoriteButton: ImageButton = view.findViewById(R.id.btn_favorite) // <-- ADICIONADO
+        private val variablesListTextView: TextView = view.findViewById(R.id.tv_variables_list) // <-- ADICIONADO
+        private val constantsListTextView: TextView = view.findViewById(R.id.tv_constants_list) // <-- ADICIONADO
+        private val separatorView: View = view.findViewById(R.id.separator_variables_constants) // <-- ADICIONADO
+
+        // Suas Views existentes
         val cardView: CardView = view as CardView
-        val contentLayout: LinearLayout = view.findViewById<LinearLayout>(R.id.layout_expandable_content).parent as LinearLayout
+        val contentLayout: LinearLayout = view.findViewById<LinearLayout>(R.id.contentLayout) // Corrigido para pegar o ID do LinearLayout principal
         val formulaName: TextView = view.findViewById(R.id.tv_formula_name)
         val formulaDescription: TextView = view.findViewById(R.id.tv_formula_description)
         val formulaWebView: WebView = view.findViewById(R.id.webview_latex_formula)
-
         private val expandableContentLayout: LinearLayout = view.findViewById(R.id.layout_expandable_content)
         private val expandStatusTextView: TextView = view.findViewById(R.id.tv_expand_status)
         private val variablesHeaderTextView: TextView = view.findViewById(R.id.tv_variables_header)
-        private val variablesListTextView: TextView = view.findViewById(R.id.tv_variables_list)
-        private val separatorView: View = view.findViewById(R.id.separator_variables_constants)
         private val constantsHeaderTextView: TextView = view.findViewById(R.id.tv_constants_header)
-        private val constantsListTextView: TextView = view.findViewById(R.id.tv_constants_list)
 
-        // REMOVIDO: private var isExpanded = false
         private var isFormulaRendered = false
         private var isWebViewSetupDone = false
         lateinit var currentFormula: FormulaX
@@ -120,6 +122,7 @@ class FormulasAdapter(
         @SuppressLint("SetJavaScriptEnabled")
         fun setupWebViewDefaults(webView: WebView) {
             if (isWebViewSetupDone) return
+
             webView.settings.javaScriptEnabled = true
             webView.settings.domStorageEnabled = true
             webView.settings.cacheMode = WebSettings.LOAD_NO_CACHE
@@ -139,28 +142,54 @@ class FormulasAdapter(
             currentFormula = formula
             formulaName.text = formula.name
             formulaDescription.text = formula.description
+
             if (!isWebViewSetupDone) {
                 setupWebViewDefaults(formulaWebView)
             }
-            val variablesText = formatTermsForDisplay(formula.variables)
-            variablesListTextView.text = variablesText.ifBlank { "" }
-            val constantsText = formatTermsForDisplay(formula.constants)
-            constantsListTextView.text = constantsText.ifBlank { "" }
-            isFormulaRendered = false
+            // Formata e define o texto para variáveis e constantes
+            variablesListTextView.text = formatTermsForDisplay(formula.variables)
+            constantsListTextView.text = formatTermsForDisplay(formula.constants)
 
-            // MUDANÇA: Atualiza UI baseado no estado da fórmula
+            isFormulaRendered = false
             updateExpandCollapseUI(formula)
 
-            // MUDANÇA: Altera o listener para modificar o estado da fórmula e notificar
+
             cardView.setOnClickListener {
                 formula.isExpanded = !formula.isExpanded
                 notifyItemChanged(adapterPosition)
                 onFormulaClick(formula)
             }
+
+
+            updateFavoriteIcon(formula) // Define o estado visual inicial da estrela
+            favoriteButton.setOnClickListener {
+                // Inverte o estado de favorito
+                FavoritesManager.toggleFormulaFavorite(context, formula.name)
+                formula.isFavorite = !formula.isFavorite
+                // Atualiza o ícone da estrela visualmente
+                updateFavoriteIcon(formula)
+            }
         }
 
-        // MUDANÇA: Função agora recebe a fórmula como parâmetro
+
+        private fun updateFavoriteIcon(formula: FormulaX) {
+            val iconResId = if (formula.isFavorite) {
+                // Se for favorito, define o ícone de estrela preenchida
+                favoriteButton.setImageResource(R.drawable.ic_star_filled)
+
+                // Aplica um filtro de cor ao ícone
+                favoriteButton.setColorFilter(ContextCompat.getColor(context, R.color.golden))
+
+            } else {
+
+                favoriteButton.setImageResource(R.drawable.ic_star_border)
+
+                favoriteButton.clearColorFilter()
+            }
+        }
+
         fun updateExpandCollapseUI(formula: FormulaX) {
+
             if (formula.isExpanded) {
                 expandableContentLayout.visibility = View.VISIBLE
                 expandStatusTextView.text = context.getString(R.string.collapse)
@@ -173,27 +202,25 @@ class FormulasAdapter(
                 } else {
                     formulaWebView.visibility = View.GONE
                 }
+
                 val variablesPresent = variablesListTextView.text.isNotBlank()
                 variablesHeaderTextView.visibility = if (variablesPresent) View.VISIBLE else View.GONE
                 variablesListTextView.visibility = if (variablesPresent) View.VISIBLE else View.GONE
+
                 val constantsPresent = constantsListTextView.text.isNotBlank()
                 constantsHeaderTextView.visibility = if (constantsPresent) View.VISIBLE else View.GONE
                 constantsListTextView.visibility = if (constantsPresent) View.VISIBLE else View.GONE
+
                 separatorView.visibility = if (variablesPresent && constantsPresent) View.VISIBLE else View.GONE
             } else {
                 expandableContentLayout.visibility = View.GONE
                 expandStatusTextView.text = context.getString(R.string.expand)
                 expandStatusTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0)
-                formulaWebView.visibility = View.GONE
-                variablesHeaderTextView.visibility = View.GONE
-                variablesListTextView.visibility = View.GONE
-                separatorView.visibility = View.GONE
-                constantsHeaderTextView.visibility = View.GONE
-                constantsListTextView.visibility = View.GONE
             }
         }
 
         private fun formatTermsForDisplay(termsMap: Map<String, String>?): SpannableStringBuilder {
+
             val builder = SpannableStringBuilder()
             termsMap?.forEach { (symbol, description) ->
                 if (builder.isNotEmpty()) {
@@ -208,6 +235,7 @@ class FormulasAdapter(
         }
 
         private fun renderFormulaInWebView(formula: FormulaX) {
+
             formulaWebView.webViewClient = object : WebViewClient() {
                 override fun onPageFinished(view: WebView?, url: String?) {
                     super.onPageFinished(view, url)
@@ -243,42 +271,32 @@ class FormulasAdapter(
 
     override fun onBindViewHolder(holder: FormulaViewHolder, position: Int) {
         val formula = formulas[position]
+
+
+        formula.isFavorite = FavoritesManager.isFormulaFavorite(context, formula.name)
+
+
         holder.bind(formula)
 
-        // SEMPRE restaura a cor de fundo padrão primeiro (para views recicladas)
+
         holder.contentLayout.setBackgroundColor(defaultBackgroundColor)
-
-        // Remove qualquer tag anterior
         holder.contentLayout.tag = null
-
-        // Verifica se é exatamente a posição alvo
         if (position == targetPosition && targetPosition != -1 && animatedId == null) {
-            // Marca como animado SINCRONAMENTE
             animatedId = animationId
-
-            // Tag a view com o ID da animação
             holder.contentLayout.tag = animationId
-
-            // Anima IMEDIATAMENTE sem post
             animateHighlight(holder.contentLayout, animationId)
         }
     }
 
     private fun animateHighlight(contentLayout: LinearLayout, expectedId: Long) {
+
         try {
-            // Verifica se a tag ainda corresponde
             if (contentLayout.tag != expectedId) {
                 return
             }
-
             val highlightColor = ContextCompat.getColor(context, R.color.highlight_color) or 0xFF000000.toInt()
-
-            // Define a cor de destaque
             contentLayout.setBackgroundColor(highlightColor)
-
-            // Anima de volta para a cor padrão
             contentLayout.postDelayed({
-                // Verifica novamente antes de animar
                 if (contentLayout.tag == expectedId) {
                     val colorAnimator = ValueAnimator.ofObject(ArgbEvaluator(), highlightColor, defaultBackgroundColor)
                     colorAnimator.duration = 1500

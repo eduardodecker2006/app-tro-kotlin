@@ -16,23 +16,17 @@ import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.adapters.FavoritesCarouselAdapter
 import com.example.myapplication.adapters.SearchAdapter
+import com.example.myapplication.models.FormulaX
 import com.example.myapplication.models.SearchableItem
-import com.example.myapplication.models.Subjects
 import com.example.myapplication.utils.DisciplinaJsonReader
+import com.example.myapplication.utils.FavoritesManager
 import java.util.Locale
 
 class HomeTab : Fragment() {
 
-    /**
-     * Data class para representar um par de frase + emoji
-     */
     data class PhrasePair(val phrase: String, val emoji: String)
-
-    /**
-     * Lista de pares de frases de boas-vindas com seus respectivos emojis.
-     * Cada frase tem seu emoji fixo, e um par aleatório é escolhido.
-     */
     private val phrasePairs = listOf(
         PhrasePair("Pronto para aprender algo novo hoje?", "💡"),
         PhrasePair("Que tal uma dose de eletrônica?", "🔋"),
@@ -54,13 +48,17 @@ class HomeTab : Fragment() {
         PhrasePair("Aprender também pode ser diversão!", "😄"),
     )
 
-    // A lista principal para a UI, contendo apenas os dados simples e pesquisáveis.
     private val searchableList = mutableListOf<SearchableItem>()
     private lateinit var searchAdapter: SearchAdapter
-
-    // --- NOVO: Instância do leitor de JSON ---
     private val disciplinaReader = DisciplinaJsonReader()
+    private lateinit var rvFavoritesCarousel: RecyclerView
+    private lateinit var tvFavoritesTitle: TextView
+    private var allFormulas: List<FormulaX>? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loadAllContentFromAssets()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,28 +69,24 @@ class HomeTab : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // --- Configuração da Saudação ---
         setupGreetingMessage(view)
-
-        // --- Configuração da Pesquisa e RecyclerView ---
         setupSearch(view)
+        setupFavoritesCarousel(view)
     }
 
-    /** Configura a mensagem de boas-vindas com nome, emoji e frase aleatória. */
+    override fun onResume() {
+        super.onResume()
+        displayFavorites()
+    }
+
     private fun setupGreetingMessage(view: View) {
         val welcomeTextView = view.findViewById<TextView>(R.id.welcome_home_textview)
         val sharedPreferences =
             requireActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         val userName = sharedPreferences.getString("user_name", "Usuário") ?: "Usuário"
-
-        // Seleciona um par aleatório de frase + emoji
         val randomPair = phrasePairs.random()
-
         val greetingPart = "Olá, $userName! ${randomPair.emoji}\n"
         val fullText = greetingPart + randomPair.phrase
-
-        // Aplica a formatação para diminuir o tamanho da segunda linha
         val spannableString = SpannableString(fullText)
         val sizeSpan = RelativeSizeSpan(0.8f)
         val startIndex = greetingPart.length
@@ -101,26 +95,17 @@ class HomeTab : Fragment() {
         welcomeTextView.text = spannableString
     }
 
-    /** Configura a RecyclerView e a SearchView para a funcionalidade de busca. */
     private fun setupSearch(view: View) {
-        // Carrega os dados dos arquivos JSON
-        loadAndTransformContentFromAssets()
-
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_results)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
         searchAdapter = SearchAdapter(emptyList()) { clickedItem ->
             navigateToFormulas(clickedItem)
         }
         recyclerView.adapter = searchAdapter
-
-        // 🔹 Garante que inicia invisível
         recyclerView.visibility = View.GONE
-
         val searchView = view.findViewById<androidx.appcompat.widget.SearchView>(R.id.search_view)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = false
-
             override fun onQueryTextChange(newText: String?): Boolean {
                 filterContent(newText)
                 return true
@@ -128,76 +113,101 @@ class HomeTab : Fragment() {
         })
     }
 
-    /**
-     * Lê todos os arquivos .json da pasta assets, converte-os de dados complexos (Subjects)
-     * para uma lista simples e otimizada (SearchableItem) para a busca.
-     */
-    private fun loadAndTransformContentFromAssets() {
-        searchableList.clear() // Garante que a lista esteja vazia antes de carregar
-
-        try {
-            // Lista todos os arquivos na raiz da pasta assets
-            val fileNames = requireContext().assets.list("")
-
-            fileNames?.forEach { fileName ->
-                if (fileName.endsWith(".json")) {
-                    // Usa o DisciplinaJsonReader para carregar o objeto
-                    val subject = disciplinaReader.loadDisciplina(requireContext(), fileName)
-
-                    if (subject != null) {
-                        /* A MÁGICA ACONTECE AQUI - apenas aceite */
-                        subject.formulas?.forEach { formula ->
-                            val searchText = (
-                                    subject.name + " " +
-                                            formula.name + " " +
-                                            formula.description + " " +
-                                            (subject.tags?.joinToString(" ") ?: "") + " " +
-                                            (subject.alias?.joinToString(" ") ?: "")
-                                    ).lowercase(Locale.ROOT)
-
-                            searchableList.add(
-                                SearchableItem(
-                                    title = formula.name,
-                                    description = subject.name,
-                                    searchText = searchText,
-                                    sourceFile = fileName
-                                )
-                            )
-                        }
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            Log.e("HomeTab", "Erro geral ao carregar assets", e)
-        }
+    private fun setupFavoritesCarousel(view: View) {
+        tvFavoritesTitle = view.findViewById(R.id.tv_favorites_title)
+        rvFavoritesCarousel = view.findViewById(R.id.rv_favorites_carousel)
+        rvFavoritesCarousel.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
     }
 
-    /** Filtra a lista de busca com base no texto digitado pelo usuário. */
-    private fun filterContent(query: String?) {
-        val recyclerView = view?.findViewById<RecyclerView>(R.id.recycler_view_results)
+    private fun displayFavorites() {
+        if (!isAdded) return
 
-        if (query.isNullOrBlank()) {
-            searchAdapter.updateList(emptyList())
-            recyclerView?.visibility = View.GONE   // 🔹 esconde completamente
+        val favoriteNames = FavoritesManager.getFormulaFavorites(requireContext())
+
+        if (favoriteNames.isEmpty()) {
+            tvFavoritesTitle.visibility = View.GONE
+            rvFavoritesCarousel.visibility = View.GONE
             return
         }
 
+        if (allFormulas == null) {
+
+            Log.e("HomeTab_Display", "A lista 'allFormulas' ainda está nula. A leitura do JSON pode ter falhado.")
+            return
+        }
+
+        tvFavoritesTitle.visibility = View.VISIBLE
+        rvFavoritesCarousel.visibility = View.VISIBLE
+
+        val favoriteFormulaObjects = allFormulas!!.filter { formula ->
+            favoriteNames.contains(formula.name)
+        }
+
+        val carouselAdapter = FavoritesCarouselAdapter(requireContext(), favoriteFormulaObjects)
+        rvFavoritesCarousel.adapter = carouselAdapter
+    }
+
+    private fun loadAllContentFromAssets() {
+        if (allFormulas != null) return
+
+        val tempSearchableList = mutableListOf<SearchableItem>()
+        val tempAllFormulas = mutableListOf<FormulaX>()
+
+        try {
+            val fileNames = requireContext().assets.list("")?.filter { it.endsWith(".json") }
+            fileNames?.forEach { fileName ->
+                val subject = disciplinaReader.loadDisciplina(requireContext(), fileName)
+                if (subject?.formulas != null) {
+                    subject.formulas.forEach { formula ->
+                        formula.disciplinaOrigem = subject.name
+                        formula.arquivoJsonOrigem = fileName
+                        tempAllFormulas.add(formula)
+
+                        val searchText = (
+                                (subject.name ?: "") + " " +
+                                        formula.name + " " +
+                                        (formula.description ?: "") + " " +
+                                        (subject.tags?.joinToString(" ") ?: "") + " " +
+                                        (subject.alias?.joinToString(" ") ?: "")
+                                ).lowercase(Locale.ROOT)
+
+
+                        tempSearchableList.add(
+                            SearchableItem(
+                                title = formula.name,
+                                description = subject.name ?: "Disciplina Desconhecida",
+                                searchText = searchText,
+                                sourceFile = fileName
+                            )
+                        )
+                    }
+                }
+            }
+            allFormulas = tempAllFormulas
+            searchableList.clear()
+            searchableList.addAll(tempSearchableList)
+            Log.d("HomeTab_Loader", "Carregou com sucesso ${allFormulas?.size} fórmulas.")
+        } catch (e: Exception) {
+            Log.e("HomeTab_Loader", "Erro CRÍTICO ao carregar assets. Verifique seus arquivos JSON.", e)
+        }
+    }
+
+    private fun filterContent(query: String?) {
+        val recyclerView = view?.findViewById<RecyclerView>(R.id.recycler_view_results)
+        if (query.isNullOrBlank()) {
+            searchAdapter.updateList(emptyList())
+            recyclerView?.visibility = View.GONE
+            return
+        }
         val filteredList = searchableList.filter { item ->
             item.searchText.contains(query.lowercase(Locale.ROOT))
         }
-
         searchAdapter.updateList(filteredList)
-
         recyclerView?.visibility = if (filteredList.isEmpty()) View.GONE else View.VISIBLE
     }
 
-
-    /**
-     * Navega para a FormulasActivity quando um item da busca é clicado.
-     * ESTA FUNÇÃO AGORA ESTÁ DENTRO DA CLASSE.
-     */
     private fun navigateToFormulas(item: SearchableItem) {
-        Log.d("HomeTab_Navigation", "Clicou em '${item.title}', navegando com o arquivo: ${item.sourceFile}")
         try {
             val intent = Intent(requireContext(), FormulasActivity::class.java).apply {
                 putExtra("disciplina_arquivo_json", item.sourceFile)
@@ -206,7 +216,6 @@ class HomeTab : Fragment() {
             }
             startActivity(intent)
         } catch (e: Exception) {
-            Log.e("HomeTab_Navigation", "Erro ao iniciar FormulasActivity", e)
             Toast.makeText(requireContext(), "Não foi possível abrir a disciplina.", Toast.LENGTH_SHORT).show()
         }
     }
