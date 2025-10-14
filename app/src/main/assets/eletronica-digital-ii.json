@@ -1,0 +1,167 @@
+{
+    "name_disc": "Eletrônica Digital II",
+    "id": 0,
+    "status": "active",
+    "slug": "eletronica-digital-ii",
+    "parents": [
+        "eletronica-digital-i",
+        "eletronica-digital-ii",
+        "eletronica-digital-iii",
+        "eletronica-digital-iv",
+        "eletronica-digital-v"
+    ],
+    "needs": [
+        "eletronica-digital-i"
+    ],
+    "semmester": 4,
+    "course": "eletrônica",
+    "period": "integrado",
+    "description": "Conceitos e fórmulas fundamentais da disciplina de Eletrônica Digital II",
+    "content": "A disciplina de Eletrônica Digital II aprofunda os conceitos estudados em Eletrônica Digital I, abordando operações lógicas combinacionais e sequenciais mais avançadas. O foco está em circuitos como codificadores, decodificadores, multiplexadores, somadores e flip-flops, além de técnicas de representação binária como o complemento de dois. Seu objetivo é fornecer ao aluno base sólida para compreender e projetar sistemas digitais mais complexos, preparando o caminho para disciplinas posteriores.",
+    "obs": "Revise bastante os conceitos de álgebra booleana e pratique a montagem de circuitos — a prática ajuda a memorizar de verdade.",
+    "chapters": [
+        "Complemento de Dois",
+        "Cálculo de bits de controle de um MUX",
+        "Comparador de 1 bit – A > B",
+        "Comparador de 1 bit – A = B",
+        "Comparador de 1 bit – A < B",
+        "Operação do Somador/Subtrator"
+    ],
+    "formulas": [
+        {
+            "name": "Complemento de Dois",
+            "description": "Representação de números negativos em sistemas binários.",
+            "latex": [
+                "Comp_2(N) = ~N + 1"
+            ],
+            "constants": {},
+            "variables": {
+                "N": "Número binário positivo a ser invertido",
+                "~N": "Inverso bit a bit de N",
+                "Comp_2(N)": "Complemento de dois de N"
+            }
+        },
+        {
+            "name": "Cálculo de bits de controle de um MUX",
+            "description": "Número de bits de seleção necessários para um multiplexador com n entradas.",
+            "latex": [
+                "m = log_2(n)"
+            ],
+            "constants": {},
+            "variables": {
+                "m": "Número de bits de controle",
+                "n": "Número de entradas de dados do MUX"
+            }
+        },
+        {
+            "name": "Comparador de 1 bit – A > B",
+            "description": "Identifica se A é maior que B.",
+            "latex": [
+                "A > B = A · B'"
+            ],
+            "constants": {},
+            "variables": {
+                "A": "Bit de entrada A",
+                "B": "Bit de entrada B"
+            }
+        },
+        {
+            "name": "Comparador de 1 bit – A = B",
+            "description": "Identifica se A é igual a B.",
+            "latex": [
+                "A = B = A' · B' + A · B"
+            ],
+            "constants": {},
+            "variables": {
+                "A": "Bit de entrada A",
+                "B": "Bit de entrada B"
+            }
+        },
+        {
+            "name": "Comparador de 1 bit – A < B",
+            "description": "Identifica se A é menor que B.",
+            "latex": [
+                "A < B = A' · B"
+            ],
+            "constants": {},
+            "variables": {
+                "A": "Bit de entrada A",
+                "B": "Bit de entrada B"
+            }
+        },
+        {
+            "name": "Operação do Somador/Subtrator",
+            "description": "Define a operação realizada com base no valor do sinal SUB.",
+            "latex": [
+                "SUB = 0 → A + B",
+                "SUB = 1 → A + ~B + 1"
+            ],
+            "constants": {},
+            "variables": {
+                "A": "Primeiro operando binário",
+                "B": "Segundo operando binário",
+                "SUB": "Bit de controle: 0 para soma, 1 para subtração"
+            }
+        }
+    ],
+    "supervisors": [
+        {
+            "name": "Fabricio Neitzke Ferreira",
+            "role": "Professor",
+            "degree": "Doutor",
+            "university": "Universidade Federal de Pelotas",
+            "campus": "Campus Pelotas",
+            "course": "Curso Ténico em Eletrônica",
+            "email": "fabricioferreira@ifsul.edu.br",
+            "telephone": null,
+            "github": null,
+            "instagram": null,
+            "youtube": null,
+            "whatsapp": null
+        }
+    ],
+    "references": [
+        {
+            "name": "Apostila de Eletrônica Digital II",
+            "url": "",
+            "description": "Material didático do IFSul utilizado na disciplina."
+        }
+    ],
+    "images": [
+        {
+            "name": "Circuito Digital Exemplo",
+            "id": 0,
+            "alt": "Imagem de circuitos digitais básicos",
+            "url": "",
+            "source": "",
+            "author": ""
+        }
+    ],
+    "tags": [
+        "eletrônica digital",
+        "complemento de dois",
+        "multiplexador",
+        "comparador",
+        "somador",
+        "ifsul"
+    ],
+    "alias": [
+        "edii",
+        "ed2",
+        "eletronica digital",
+        "ed-ii"
+    ],
+    "articleWriters": [
+        {
+            "summary": [],
+            "formulas": [],
+            "json": []
+        }
+    ],
+    "files": [],
+    "embededVideos": [],
+    "created_at": null,
+    "updated_at": null,
+    "deleted_at": null,
+    "fileVersion": 2
+}

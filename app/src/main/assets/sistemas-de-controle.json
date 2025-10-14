@@ -1,0 +1,281 @@
+{
+    "name_disc": "Sistemas de Controle",
+    "id": 0,
+    "status": "active",
+    "slug": "sistemas-de-controle",
+    "needs": [],
+    "semmester": 8,
+    "course": "eletrônica",
+    "period": "integrado",
+    "description": "Conceitos e fórmulas fundamentais da disciplina de Sistemas de Controle, abordando princípios de realimentação, estabilidade, funções de transferência e controladores clássicos P, PI, PD e PID.",
+    "content": "A disciplina de Sistemas de Controle apresenta os fundamentos teóricos e práticos do controle automático aplicado a sistemas eletrônicos e industriais. Aborda modelagem de sistemas, análise em malha aberta e fechada, resposta temporal, estabilidade, e projeto de controladores clássicos (P, PI, PD e PID). Também são discutidos métodos de sintonia, tempo morto e comportamento dinâmico de processos de 1ª e 2ª ordem, com aplicação em controle de temperatura, nível e velocidade.",
+    "obs": "Estude bem a diferença entre as ações P, I e D — e pratique a interpretação de gráficos de resposta ao degrau. Isso ajuda a compreender o comportamento real dos sistemas controlados.",
+    "chapters": [
+        "Fundamentos de Controle e Realimentação",
+        "Função de Transferência e Modelagem de Sistemas",
+        "Controle Proporcional (P)",
+        "Controle Integral (I)",
+        "Controle Derivativo (D)",
+        "Controladores Combinados (PI, PD, PID)",
+        "Critérios de Estabilidade e Erros de Regime",
+        "Sintonia de Controladores – Método de Ziegler–Nichols",
+        "Processos de Primeira e Segunda Ordem",
+        "Controle de Processos Industriais e Malhas de Controle"
+    ],
+    "formulas": [
+        {
+            "name": "Erro (Desvio)",
+            "description": "Diferença entre o valor desejado (setpoint) e o valor medido (variável de processo).",
+            "latex": [
+                "e(t) = SP - PV"
+            ],
+            "constants": {},
+            "variables": {
+                "e(t)": "Erro instantâneo",
+                "SP": "Valor de referência (setpoint)",
+                "PV": "Valor medido (process variable)"
+            }
+        },
+        {
+            "name": "Função de Transferência (geral)",
+            "description": "Relação entre a saída e a entrada de um sistema no domínio de Laplace.",
+            "latex": [
+                "G(s) = \\frac{Y(s)}{U(s)}"
+            ],
+            "constants": {},
+            "variables": {
+                "G(s)": "Função de transferência",
+                "Y(s)": "Saída do sistema no domínio de Laplace",
+                "U(s)": "Entrada do sistema no domínio de Laplace"
+            }
+        },
+        {
+            "name": "Função de Transferência em Malha Fechada",
+            "description": "Com realimentação, a função de transferência total é ajustada pelo ganho do sistema.",
+            "latex": [
+                "T(s) = \\frac{G(s)}{1 + G(s)H(s)}"
+            ],
+            "constants": {},
+            "variables": {
+                "T(s)": "Função de transferência de malha fechada",
+                "G(s)": "Função de transferência do sistema",
+                "H(s)": "Função de realimentação"
+            }
+        },
+        {
+            "name": "Controle Proporcional (P)",
+            "description": "O sinal de controle é proporcional ao erro.",
+            "latex": [
+                "u(t) = K_P e(t)"
+            ],
+            "constants": {},
+            "variables": {
+                "u(t)": "Sinal de controle",
+                "K_P": "Ganho proporcional",
+                "e(t)": "Erro"
+            }
+        },
+        {
+            "name": "Controle Integral (I)",
+            "description": "Corrige o erro acumulado no tempo, eliminando o erro de regime permanente.",
+            "latex": [
+                "u(t) = K_I \\int e(t) dt"
+            ],
+            "constants": {},
+            "variables": {
+                "u(t)": "Sinal de controle",
+                "K_I": "Ganho integral",
+                "e(t)": "Erro no tempo"
+            }
+        },
+        {
+            "name": "Controle Derivativo (D)",
+            "description": "Reage à variação do erro, antecipando mudanças.",
+            "latex": [
+                "u(t) = K_D \\frac{de(t)}{dt}"
+            ],
+            "constants": {},
+            "variables": {
+                "u(t)": "Sinal de controle",
+                "K_D": "Ganho derivativo",
+                "e(t)": "Erro"
+            }
+        },
+        {
+            "name": "Controlador Proporcional-Integral (PI)",
+            "description": "Combina a resposta rápida do P com a eliminação de erro do I.",
+            "latex": [
+                "u(t) = K_P e(t) + K_I \\int e(t) dt"
+            ],
+            "constants": {},
+            "variables": {
+                "K_P": "Ganho proporcional",
+                "K_I": "Ganho integral",
+                "e(t)": "Erro instantâneo"
+            }
+        },
+        {
+            "name": "Controlador Proporcional-Derivativo (PD)",
+            "description": "Combina as ações proporcional e derivativa, melhorando a estabilidade e reduzindo o overshoot.",
+            "latex": [
+                "u(t) = K_P e(t) + K_D \\frac{de(t)}{dt}"
+            ],
+            "constants": {},
+            "variables": {
+                "K_P": "Ganho proporcional",
+                "K_D": "Ganho derivativo",
+                "e(t)": "Erro"
+            }
+        },
+        {
+            "name": "Controlador PID Completo",
+            "description": "Combina as ações proporcional, integral e derivativa para máxima estabilidade e precisão.",
+            "latex": [
+                "u(t) = K_P e(t) + K_I \\int e(t) dt + K_D \\frac{de(t)}{dt}"
+            ],
+            "constants": {},
+            "variables": {
+                "K_P": "Ganho proporcional",
+                "K_I": "Ganho integral",
+                "K_D": "Ganho derivativo",
+                "e(t)": "Erro"
+            }
+        },
+        {
+            "name": "Forma do Controlador PID em Laplace",
+            "description": "Representação no domínio de Laplace do controlador PID.",
+            "latex": [
+                "U(s) = K_P \\left(1 + \\frac{1}{T_I s} + T_D s\\right)E(s)"
+            ],
+            "constants": {},
+            "variables": {
+                "U(s)": "Sinal de controle no domínio de Laplace",
+                "E(s)": "Erro no domínio de Laplace",
+                "K_P": "Ganho proporcional",
+                "T_I": "Tempo integral",
+                "T_D": "Tempo derivativo"
+            }
+        },
+        {
+            "name": "Processo de Primeira Ordem",
+            "description": "Modelo simplificado de sistemas físicos de 1ª ordem.",
+            "latex": [
+                "G(s) = \\frac{K}{T s + 1} e^{-Ls}"
+            ],
+            "constants": {},
+            "variables": {
+                "K": "Ganho estático do processo",
+                "T": "Constante de tempo",
+                "L": "Tempo morto (atraso de transporte)"
+            }
+        },
+        {
+            "name": "Processo de Segunda Ordem",
+            "description": "Modelo padrão de sistemas com resposta oscilatória.",
+            "latex": [
+                "G(s) = \\frac{\\omega_n^2}{s^2 + 2\\zeta\\omega_n s + \\omega_n^2}"
+            ],
+            "constants": {},
+            "variables": {
+                "ω_n": "Frequência natural",
+                "ζ": "Fator de amortecimento"
+            }
+        },
+        {
+            "name": "Ziegler–Nichols (Método da Oscilação Crítica)",
+            "description": "Método empírico de sintonia de controladores PID.",
+            "latex": [
+                "K_P = 0.6 K_{cr}",
+                "T_I = \\frac{P_{cr}}{2}",
+                "T_D = \\frac{P_{cr}}{8}"
+            ],
+            "constants": {},
+            "variables": {
+                "K_{cr}": "Ganho crítico",
+                "P_{cr}": "Período de oscilação crítica"
+            }
+        },
+        {
+            "name": "Ziegler–Nichols (Versão sem Overshoot)",
+            "description": "Versão modificada para reduzir a ultrapassagem (overshoot).",
+            "latex": [
+                "K_P = 0.2 K_{cr}",
+                "T_I = \\frac{P_{cr}}{2}",
+                "T_D = \\frac{P_{cr}}{3}"
+            ],
+            "constants": {},
+            "variables": {
+                "K_{cr}": "Ganho crítico",
+                "P_{cr}": "Período de oscilação crítica"
+            }
+        }
+    ],
+    "supervisors": [
+        {
+            "name": "Fabricio Neitzke Ferreira",
+            "role": "Professor",
+            "degree": "Doutor",
+            "university": "Universidade Federal de Pelotas",
+            "campus": "Campus Pelotas",
+            "course": "Curso Ténico em Eletrônica",
+            "email": "fabricioferreira@ifsul.edu.br",
+            "telephone": null,
+            "github": null,
+            "instagram": null,
+            "youtube": null,
+            "whatsapp": null
+        }
+    ],
+    "references": [
+        {
+            "name": "Apostila Sistemas de Controle - E-Tec",
+            "url": "",
+            "description": "Material introdutório de sistemas de controle, cobrindo controladores P, PI e PID."
+        },
+        {
+            "name": "Apostila - Sistemas de Controle - 2021",
+            "url": "",
+            "description": "Versão atualizada com exemplos em PIC e implementações digitais e analógicas."
+        },
+        {
+            "name": "APO2009",
+            "url": "",
+            "description": "Apostila base teórica sobre controle automático e estabilidade de sistemas."
+        },
+        {
+            "name": "Apostila - Controle de Processos - Rafael Garlet de Oliveira",
+            "url": "",
+            "description": "Material complementar com foco em processos industriais e métodos de sintonia."
+        }
+    ],
+   
+    "tags": [
+        "controle",
+        "sistemas de controle",
+        "PID",
+        "PI",
+        "Ziegler-Nichols",
+        "automação",
+        "eletrônica"
+    ],
+    "alias": [
+        "controle-automatico",
+        "controle-processos",
+        "pid",
+        "p-i-d",
+        "sist-controle"
+    ],
+    "articleWriters": [
+        {
+            "summary": [],
+            "formulas": [],
+            "json": []
+        }
+    ],
+    "files": [],
+    "embededVideos": [],
+    "created_at": null,
+    "updated_at": null,
+    "deleted_at": null,
+    "fileVersion": 2
+}
