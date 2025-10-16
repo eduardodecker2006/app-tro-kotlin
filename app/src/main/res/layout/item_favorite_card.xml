@@ -14,7 +14,8 @@
     <!-- Conteúdo do card -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?attr/colorOnSurfaceInverse">
 
         <TextView
             android:id="@+id/tv_favorite_formula_name"
@@ -28,10 +29,10 @@
             android:gravity="top"
             android:maxLines="3"
             android:textAppearance="?attr/textAppearanceTitleSmall"
+            app:layout_constraintBottom_toTopOf="@+id/tv_favorite_subject_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/tv_favorite_subject_name"
             tools:text="Fonte de Tensão Real (Gerador Elétrico)" />
 
         <TextView

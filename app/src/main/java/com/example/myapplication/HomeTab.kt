@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.SearchView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.adapters.FavoritesCarouselAdapter
@@ -102,7 +103,7 @@ class HomeTab : Fragment() {
             navigateToFormulas(clickedItem)
         }
         recyclerView.adapter = searchAdapter
-        recyclerView.visibility = View.GONE
+
         val searchView = view.findViewById<androidx.appcompat.widget.SearchView>(R.id.search_view)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = false
@@ -132,7 +133,6 @@ class HomeTab : Fragment() {
         }
 
         if (allFormulas == null) {
-
             Log.e("HomeTab_Display", "A lista 'allFormulas' ainda está nula. A leitura do JSON pode ter falhado.")
             return
         }
@@ -172,7 +172,6 @@ class HomeTab : Fragment() {
                                         (subject.alias?.joinToString(" ") ?: "")
                                 ).lowercase(Locale.ROOT)
 
-
                         tempSearchableList.add(
                             SearchableItem(
                                 title = formula.name,
@@ -194,17 +193,20 @@ class HomeTab : Fragment() {
     }
 
     private fun filterContent(query: String?) {
-        val recyclerView = view?.findViewById<RecyclerView>(R.id.recycler_view_results)
+        val resultsOverlay = view?.findViewById<CardView>(R.id.results_overlay_container)
+
         if (query.isNullOrBlank()) {
             searchAdapter.updateList(emptyList())
-            recyclerView?.visibility = View.GONE
+            resultsOverlay?.visibility = View.GONE
             return
         }
+
         val filteredList = searchableList.filter { item ->
             item.searchText.contains(query.lowercase(Locale.ROOT))
         }
+
         searchAdapter.updateList(filteredList)
-        recyclerView?.visibility = if (filteredList.isEmpty()) View.GONE else View.VISIBLE
+        resultsOverlay?.visibility = if (filteredList.isEmpty()) View.GONE else View.VISIBLE
     }
 
     private fun navigateToFormulas(item: SearchableItem) {
