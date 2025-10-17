@@ -1,7 +1,7 @@
 {
     "name_disc": "Análise de Circuitos IV",
     "id": 0,
-    "status": "active",
+    "status": "ativo",
     "slug": "analise-de-circuitos-iv",
     "parents": ["analise-de-circuitos-i", "analise-de-circuitos-ii", "analise-de-circuitos-iii", "analise-de-circuitos-iv"],
     "needs": ["analise de circuitos i", "analise-de-circuitos-ii", "analise-de-circuitos-iii"],

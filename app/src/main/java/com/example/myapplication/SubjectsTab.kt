@@ -91,7 +91,8 @@ class SubjectsTab : Fragment() {
                 "eletronica-geral-iii.json",
                 "eletronica-geral-v.json",
                 "instrumentacao-industrial.json",
-                "sistemas-de-controle.json"
+                "sistemas-de-controle.json",
+                "sistemas-microprocessados-iii.json",
                 // Adicione aqui outros arquivos conforme você tiver:
                 // "eletronica-geral-iv.json",
             )
