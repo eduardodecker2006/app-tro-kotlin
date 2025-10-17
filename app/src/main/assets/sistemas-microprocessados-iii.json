@@ -3,7 +3,7 @@
     "id": 10,
     "status": "ativo",
     "slug": "sistemas-microprocessados-iii",
-    "parents": ["sistemas-microprocessados-i, sistemas-microprocessados-ii, sistemas-microprocessados-iii"],
+    "parents": ["sistemas-microprocessados-i, sistemas-microprocessados-ii, sistemas-microprocessados-iii, sistemas-microprocessados-iv"],
     "needs": [],
     "semmester": 7,
     "course": "eletrônica",
@@ -100,8 +100,8 @@
             "author": ""
         }
     ],
-    "tags": [],
-    "alias": [],
+    "tags": ["sistemas microprocessados", "memória cache", "hierarquia de memória", "memória principal", "computadores", "notebooks"],
+    "alias": ["smiii", "sm3", "sistemas microprocessados", "sm 3", "sm iii", "sm-3", "sm-iii"],
     "articleWriters": [
         {
             "summary": [
