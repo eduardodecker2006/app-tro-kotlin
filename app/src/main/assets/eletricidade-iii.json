@@ -1,7 +1,7 @@
 {
   "name_disc": "Eletricidade III",
   "id": 5,
-  "status":"active",
+  "status":"ativo",
   "slug": "eletricidade-iii",
   "parents": ["eletricidade-i", "eletricidade-ii", "eletricidade-iii", "eletricidade-iv"],
   "needs": ["introducao-a-eletronica,eletricidade-i,eletricidade-ii"],
