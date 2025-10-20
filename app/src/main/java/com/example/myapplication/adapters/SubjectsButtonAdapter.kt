@@ -17,7 +17,6 @@
         class DisciplinaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val tvNome: TextView = itemView.findViewById(R.id.tv_disciplina_nome)
             val tvSemestre: TextView = itemView.findViewById(R.id.tv_disciplina_semestre)
-            val tvStatus: TextView = itemView.findViewById(R.id.tv_disciplina_status)
             val tvDescricao: TextView = itemView.findViewById(R.id.tv_disciplina_descricao)
             val tvCurso: TextView = itemView.findViewById(R.id.tv_disciplina_curso)
             val tvFormulas: TextView = itemView.findViewById(R.id.tv_disciplina_formulas)
@@ -37,10 +36,6 @@
     
             // Semestre
             holder.tvSemestre.text = "${disciplina.semmester}° semestre"
-    
-            // Status com cor
-            holder.tvStatus.text = disciplina.status.uppercase()
-            configureStatusBackground(holder.tvStatus, disciplina.status)
     
             // Descrição
             holder.tvDescricao.text = disciplina.description
