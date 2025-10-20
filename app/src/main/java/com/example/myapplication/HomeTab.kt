@@ -124,25 +124,52 @@ class HomeTab : Fragment() {
     private fun displayFavorites() {
         if (!isAdded) return
 
-        val favoriteNames = FavoritesManager.getFormulaFavorites(requireContext())
+        val favoriteIds = FavoritesManager.getFormulaFavorites(requireContext())
 
-        if (favoriteNames.isEmpty()) {
+        Log.d("HomeTab_Favorites", "=== DEBUG FAVORITOS ===")
+        Log.d("HomeTab_Favorites", "IDs salvos no SharedPreferences: $favoriteIds")
+
+        if (favoriteIds.isEmpty()) {
             tvFavoritesTitle.visibility = View.GONE
             rvFavoritesCarousel.visibility = View.GONE
+            Log.d("HomeTab_Favorites", "Nenhum favorito encontrado")
             return
         }
 
         if (allFormulas == null) {
-            Log.e("HomeTab_Display", "A lista 'allFormulas' ainda está nula. A leitura do JSON pode ter falhado.")
+            Log.e("HomeTab_Display", "A lista 'allFormulas' ainda está nula.")
+            return
+        }
+
+        // Debug: Verificar IDs de todas as fórmulas carregadas
+        Log.d("HomeTab_Favorites", "--- Fórmulas Carregadas (primeiras 5) ---")
+        allFormulas!!.take(5).forEach { formula ->
+            Log.d("HomeTab_Favorites", "Nome: '${formula.name}', ID Único: '${formula.getUniqueId()}'")
+        }
+
+        val favoriteFormulaObjects = allFormulas!!.filter { formula ->
+            val uniqueId = formula.getUniqueId()
+            val isFavorite = favoriteIds.contains(uniqueId)
+
+            // Debug detalhado
+            if (isFavorite) {
+                Log.d("HomeTab_Favorites", "✓ MATCH: '${formula.name}' (ID: '$uniqueId')")
+            }
+
+            isFavorite
+        }
+
+        Log.d("HomeTab_Favorites", "Total de favoritos filtrados: ${favoriteFormulaObjects.size}")
+
+        if (favoriteFormulaObjects.isEmpty()) {
+            tvFavoritesTitle.visibility = View.GONE
+            rvFavoritesCarousel.visibility = View.GONE
+            Log.w("HomeTab_Favorites", "Nenhuma fórmula correspondeu aos IDs salvos!")
             return
         }
 
         tvFavoritesTitle.visibility = View.VISIBLE
         rvFavoritesCarousel.visibility = View.VISIBLE
-
-        val favoriteFormulaObjects = allFormulas!!.filter { formula ->
-            favoriteNames.contains(formula.name)
-        }
 
         val carouselAdapter = FavoritesCarouselAdapter(requireContext(), favoriteFormulaObjects)
         rvFavoritesCarousel.adapter = carouselAdapter
@@ -160,8 +187,10 @@ class HomeTab : Fragment() {
                 val subject = disciplinaReader.loadDisciplina(requireContext(), fileName)
                 if (subject?.formulas != null) {
                     subject.formulas.forEach { formula ->
+                        // *** CRÍTICO: Preencher os campos ANTES de adicionar à lista ***
                         formula.disciplinaOrigem = subject.name
                         formula.arquivoJsonOrigem = fileName
+
                         tempAllFormulas.add(formula)
 
                         val searchText = (
@@ -186,9 +215,16 @@ class HomeTab : Fragment() {
             allFormulas = tempAllFormulas
             searchableList.clear()
             searchableList.addAll(tempSearchableList)
+
             Log.d("HomeTab_Loader", "Carregou com sucesso ${allFormulas?.size} fórmulas.")
+
+            // Debug: Verificar se os campos estão preenchidos
+            allFormulas?.take(3)?.forEach { formula ->
+                Log.d("HomeTab_Loader", "Fórmula: '${formula.name}', Arquivo: '${formula.arquivoJsonOrigem}', ID: '${formula.getUniqueId()}'")
+            }
+
         } catch (e: Exception) {
-            Log.e("HomeTab_Loader", "Erro CRÍTICO ao carregar assets. Verifique seus arquivos JSON.", e)
+            Log.e("HomeTab_Loader", "Erro CRÍTICO ao carregar assets.", e)
         }
     }
 

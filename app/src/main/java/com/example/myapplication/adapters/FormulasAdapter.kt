@@ -146,13 +146,12 @@ class FormulasAdapter(
             if (!isWebViewSetupDone) {
                 setupWebViewDefaults(formulaWebView)
             }
-            // Formata e define o texto para variáveis e constantes
+
             variablesListTextView.text = formatTermsForDisplay(formula.variables)
             constantsListTextView.text = formatTermsForDisplay(formula.constants)
 
             isFormulaRendered = false
             updateExpandCollapseUI(formula)
-
 
             cardView.setOnClickListener {
                 formula.isExpanded = !formula.isExpanded
@@ -160,30 +159,35 @@ class FormulasAdapter(
                 onFormulaClick(formula)
             }
 
+            // Log para debug
+            Log.d("FormulasAdapter", "Bind - Fórmula: '${formula.name}', ID Único: '${formula.getUniqueId()}', isFavorite: ${formula.isFavorite}")
 
-            updateFavoriteIcon(formula) // Define o estado visual inicial da estrela
+            updateFavoriteIcon(formula)
+
             favoriteButton.setOnClickListener {
-                // Inverte o estado de favorito
-                FavoritesManager.toggleFormulaFavorite(context, formula.name)
+                Log.d("FormulasAdapter", "Click Favorito - ANTES: isFavorite=${formula.isFavorite}")
+
+                // Inverte o estado
+                FavoritesManager.toggleFormulaFavorite(context, formula)
                 formula.isFavorite = !formula.isFavorite
-                // Atualiza o ícone da estrela visualmente
+
+                Log.d("FormulasAdapter", "Click Favorito - DEPOIS: isFavorite=${formula.isFavorite}, ID: '${formula.getUniqueId()}'")
+
+                // Verifica o que está salvo
+                val savedFavorites = FavoritesManager.getFormulaFavorites(context)
+                Log.d("FormulasAdapter", "Favoritos Salvos: $savedFavorites")
+
                 updateFavoriteIcon(formula)
             }
         }
 
 
         private fun updateFavoriteIcon(formula: FormulaX) {
-            val iconResId = if (formula.isFavorite) {
-                // Se for favorito, define o ícone de estrela preenchida
+            if (formula.isFavorite) {
                 favoriteButton.setImageResource(R.drawable.ic_star_filled)
-
-                // Aplica um filtro de cor ao ícone
                 favoriteButton.setColorFilter(ContextCompat.getColor(context, R.color.golden))
-
             } else {
-
                 favoriteButton.setImageResource(R.drawable.ic_star_border)
-
                 favoriteButton.clearColorFilter()
             }
         }
@@ -272,15 +276,14 @@ class FormulasAdapter(
     override fun onBindViewHolder(holder: FormulaViewHolder, position: Int) {
         val formula = formulas[position]
 
-
-        formula.isFavorite = FavoritesManager.isFormulaFavorite(context, formula.name)
-
+        // --- MUDANÇA AQUI: Passa o objeto formula inteiro ---
+        formula.isFavorite = FavoritesManager.isFormulaFavorite(context, formula)
 
         holder.bind(formula)
 
-
         holder.contentLayout.setBackgroundColor(defaultBackgroundColor)
         holder.contentLayout.tag = null
+
         if (position == targetPosition && targetPosition != -1 && animatedId == null) {
             animatedId = animationId
             holder.contentLayout.tag = animationId
