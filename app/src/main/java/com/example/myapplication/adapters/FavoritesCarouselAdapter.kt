@@ -34,10 +34,8 @@ class FavoritesCarouselAdapter(
          * Preenche o card com os dados da fórmula e configura a ação de clique.
          */
         fun bind(formula: FormulaX) {
-
             nameTextView.text = formula.name
             subjectNameTextView.text = formula.disciplinaOrigem
-
 
             Log.d(
                 "FavCarouselAdapter",
@@ -60,8 +58,10 @@ class FavoritesCarouselAdapter(
                     putExtra("disciplina_arquivo_json", formula.arquivoJsonOrigem)
                     // Passa o nome da disciplina para ser exibido na toolbar
                     putExtra("disciplina_nome", formula.disciplinaOrigem)
-                    // Passa o nome da fórmula para que a lista possa rolar até ela
+                    // *** MUDANÇA CRÍTICA: Passa o nome DA FÓRMULA para scroll ***
                     putExtra("formula_nome_foco", formula.name)
+                    // *** NOVO: Passa o ÍNDICE da fórmula para identificação única ***
+                    putExtra("formula_indice_foco", formula.indiceNoArray)
                 }
                 // Inicia a activity
                 context.startActivity(intent)

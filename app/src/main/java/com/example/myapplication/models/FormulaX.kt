@@ -22,19 +22,24 @@ data class FormulaX(
     // Necessário para o clique no carrossel saber qual disciplina abrir.
     @Transient var disciplinaOrigem: String? = null,
     // Necessário para o clique no carrossel saber qual arquivo carregar.
-    @Transient var arquivoJsonOrigem: String? = null
+    @Transient var arquivoJsonOrigem: String? = null,
+    // Índice da fórmula no array (necessário para diferenciar fórmulas duplicadas no mesmo arquivo)
+    @Transient var indiceNoArray: Int = -1
 ) {
     /**
-     * Gera um ID único para a fórmula baseado no arquivo JSON de origem e no nome.
-     * Formato: "arquivo-json::nome-da-formula"
+     * Gera um ID único para a fórmula baseado no arquivo JSON, índice e nome.
+     * Formato: "arquivo-json::indice::nome-da-formula"
      *
-     * Exemplo: "analise-de-circuitos-i.json::Lei de Ohm"
+     * Exemplo: "analise-de-circuitos-i.json::0::Lei de Ohm"
      *
-     * Se arquivoJsonOrigem for nulo (não deveria acontecer em uso normal),
-     * retorna apenas o nome da fórmula como fallback.
+     * O índice garante que mesmo fórmulas com nomes idênticos no mesmo arquivo
+     * tenham IDs únicos diferentes.
      */
     fun getUniqueId(): String {
-        return if (arquivoJsonOrigem != null) {
+        return if (arquivoJsonOrigem != null && indiceNoArray >= 0) {
+            "$arquivoJsonOrigem::$indiceNoArray::$name"
+        } else if (arquivoJsonOrigem != null) {
+            // Fallback se o índice não foi definido (compatibilidade)
             "$arquivoJsonOrigem::$name"
         } else {
             // Fallback caso arquivoJsonOrigem não esteja definido

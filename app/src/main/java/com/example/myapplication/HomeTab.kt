@@ -147,16 +147,17 @@ class HomeTab : Fragment() {
             Log.d("HomeTab_Favorites", "Nome: '${formula.name}', ID Único: '${formula.getUniqueId()}'")
         }
 
-        val favoriteFormulaObjects = allFormulas!!.filter { formula ->
-            val uniqueId = formula.getUniqueId()
-            val isFavorite = favoriteIds.contains(uniqueId)
-
-            // Debug detalhado
-            if (isFavorite) {
-                Log.d("HomeTab_Favorites", "✓ MATCH: '${formula.name}' (ID: '$uniqueId')")
+        // Criar um mapa de IDs únicos para evitar duplicatas
+        val favoriteFormulaObjects = favoriteIds.mapNotNull { favoriteId ->
+            allFormulas!!.find { formula ->
+                formula.getUniqueId() == favoriteId
             }
-
-            isFavorite
+        }.also { formulas ->
+            // Debug: log das fórmulas encontradas
+            Log.d("HomeTab_Favorites", "Total de favoritos filtrados (sem duplicatas): ${formulas.size}")
+            formulas.forEach { formula ->
+                Log.d("HomeTab_Favorites", "✓ MATCH: '${formula.name}' (ID: '${formula.getUniqueId()}')")
+            }
         }
 
         Log.d("HomeTab_Favorites", "Total de favoritos filtrados: ${favoriteFormulaObjects.size}")
@@ -186,10 +187,12 @@ class HomeTab : Fragment() {
             fileNames?.forEach { fileName ->
                 val subject = disciplinaReader.loadDisciplina(requireContext(), fileName)
                 if (subject?.formulas != null) {
-                    subject.formulas.forEach { formula ->
-                        // *** CRÍTICO: Preencher os campos ANTES de adicionar à lista ***
+                    // *** CRÍTICO: Use forEachIndexed para ter acesso ao índice ***
+                    subject.formulas.forEachIndexed { index, formula ->
+                        // *** PREENCHE OS 3 CAMPOS OBRIGATÓRIOS ***
                         formula.disciplinaOrigem = subject.name
                         formula.arquivoJsonOrigem = fileName
+                        formula.indiceNoArray = index  // ← ESTE ERA O PROBLEMA!
 
                         tempAllFormulas.add(formula)
 
@@ -212,15 +215,18 @@ class HomeTab : Fragment() {
                     }
                 }
             }
+
             allFormulas = tempAllFormulas
             searchableList.clear()
             searchableList.addAll(tempSearchableList)
 
             Log.d("HomeTab_Loader", "Carregou com sucesso ${allFormulas?.size} fórmulas.")
 
-            // Debug: Verificar se os campos estão preenchidos
+            // Debug das primeiras 3 fórmulas
             allFormulas?.take(3)?.forEach { formula ->
-                Log.d("HomeTab_Loader", "Fórmula: '${formula.name}', Arquivo: '${formula.arquivoJsonOrigem}', ID: '${formula.getUniqueId()}'")
+                Log.d("HomeTab_Loader",
+                    "Fórmula: '${formula.name}', Arquivo: '${formula.arquivoJsonOrigem}', " +
+                            "Índice: ${formula.indiceNoArray}, ID: '${formula.getUniqueId()}'")
             }
 
         } catch (e: Exception) {

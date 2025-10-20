@@ -20,7 +20,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.ImageButton // <-- IMPORTAÇÃO NECESSÁRIA
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -28,22 +28,24 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.models.FormulaX
-import com.example.myapplication.utils.FavoritesManager // <-- IMPORTAÇÃO NECESSÁRIA
+import com.example.myapplication.utils.FavoritesManager
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class FormulasAdapter(
     private val context: Context,
     private val formulas: List<FormulaX>,
-    private val formulaFocoNome: String?,
+    // MODIFICAÇÃO: Trocamos o 'formulaFocoNome' (String) pelo 'formulaFocoIndice' (Int)
+    // Isso nos dá a posição exata para a animação de destaque.
+    private val formulaFocoIndice: Int,
     private val onFormulaClick: (FormulaX) -> Unit
 ) : RecyclerView.Adapter<FormulasAdapter.FormulaViewHolder>() {
 
 
-    // Armazena a posição exata da fórmula alvo
-    private val targetPosition = formulas.indexOfFirst {
-        it.name.equals(formulaFocoNome, ignoreCase = true)
-    }
+    // MODIFICAÇÃO: O 'targetPosition' agora usa o 'formulaFocoIndice' que recebemos.
+    // Não precisamos mais procurar pelo nome.
+    private val targetPosition = formulaFocoIndice
+
     // ID único para a animação
     private var animationId = System.currentTimeMillis()
     // Guarda qual ID foi animado
@@ -99,14 +101,14 @@ class FormulasAdapter(
 
     inner class FormulaViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        val favoriteButton: ImageButton = view.findViewById(R.id.btn_favorite) // <-- ADICIONADO
-        private val variablesListTextView: TextView = view.findViewById(R.id.tv_variables_list) // <-- ADICIONADO
-        private val constantsListTextView: TextView = view.findViewById(R.id.tv_constants_list) // <-- ADICIONADO
-        private val separatorView: View = view.findViewById(R.id.separator_variables_constants) // <-- ADICIONADO
+        val favoriteButton: ImageButton = view.findViewById(R.id.btn_favorite)
+        private val variablesListTextView: TextView = view.findViewById(R.id.tv_variables_list)
+        private val constantsListTextView: TextView = view.findViewById(R.id.tv_constants_list)
+        private val separatorView: View = view.findViewById(R.id.separator_variables_constants)
 
         // Suas Views existentes
         val cardView: CardView = view as CardView
-        val contentLayout: LinearLayout = view.findViewById<LinearLayout>(R.id.contentLayout) // Corrigido para pegar o ID do LinearLayout principal
+        val contentLayout: LinearLayout = view.findViewById<LinearLayout>(R.id.contentLayout)
         val formulaName: TextView = view.findViewById(R.id.tv_formula_name)
         val formulaDescription: TextView = view.findViewById(R.id.tv_formula_description)
         val formulaWebView: WebView = view.findViewById(R.id.webview_latex_formula)
@@ -151,6 +153,8 @@ class FormulasAdapter(
             constantsListTextView.text = formatTermsForDisplay(formula.constants)
 
             isFormulaRendered = false
+            // A lógica de expansão agora depende apenas do 'isExpanded'
+            // que a FormulasActivity definiu.
             updateExpandCollapseUI(formula)
 
             cardView.setOnClickListener {
@@ -159,7 +163,6 @@ class FormulasAdapter(
                 onFormulaClick(formula)
             }
 
-            // Log para debug
             Log.d("FormulasAdapter", "Bind - Fórmula: '${formula.name}', ID Único: '${formula.getUniqueId()}', isFavorite: ${formula.isFavorite}")
 
             updateFavoriteIcon(formula)
@@ -167,13 +170,11 @@ class FormulasAdapter(
             favoriteButton.setOnClickListener {
                 Log.d("FormulasAdapter", "Click Favorito - ANTES: isFavorite=${formula.isFavorite}")
 
-                // Inverte o estado
                 FavoritesManager.toggleFormulaFavorite(context, formula)
                 formula.isFavorite = !formula.isFavorite
 
                 Log.d("FormulasAdapter", "Click Favorito - DEPOIS: isFavorite=${formula.isFavorite}, ID: '${formula.getUniqueId()}'")
 
-                // Verifica o que está salvo
                 val savedFavorites = FavoritesManager.getFormulaFavorites(context)
                 Log.d("FormulasAdapter", "Favoritos Salvos: $savedFavorites")
 
@@ -276,7 +277,6 @@ class FormulasAdapter(
     override fun onBindViewHolder(holder: FormulaViewHolder, position: Int) {
         val formula = formulas[position]
 
-        // --- MUDANÇA AQUI: Passa o objeto formula inteiro ---
         formula.isFavorite = FavoritesManager.isFormulaFavorite(context, formula)
 
         holder.bind(formula)
@@ -284,6 +284,8 @@ class FormulasAdapter(
         holder.contentLayout.setBackgroundColor(defaultBackgroundColor)
         holder.contentLayout.tag = null
 
+        // A lógica de destaque (sinalização) não muda.
+        // Ela agora funciona corretamente pois 'targetPosition' é o índice exato.
         if (position == targetPosition && targetPosition != -1 && animatedId == null) {
             animatedId = animationId
             holder.contentLayout.tag = animationId
