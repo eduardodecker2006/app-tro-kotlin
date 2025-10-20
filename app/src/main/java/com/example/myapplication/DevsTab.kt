@@ -99,15 +99,18 @@ class DevsTab : Fragment(), DevActionsListener {
     private fun abrirColaboradores() {
         Log.d("DevsTab", "Abrindo tela de Colaboradores")
 
-        // Cria o novo fragment
-        val fragment = ColaboradoresFragment()
+        // 1. Criar o Intent para a nova ColaboradoresActivity
+        val intent = Intent(requireContext(), ColaboradoresActivity::class.java)
 
-        // Navega para o fragment de Colaboradores
-        // O container é o mesmo que contém o DevsTab atualmente
+        // 2. Iniciar a Activity
+        startActivity(intent)
+
+        /* CÓDIGO ANTIGO DO FRAGMENTO (Removido porque tinha animações diferentes de "Activity" por padrão)
         parentFragmentManager.beginTransaction()
-            .replace(android.R.id.content, fragment) // Usa o container root padrão
-            .addToBackStack(null) // Adiciona à pilha para poder voltar
+            .replace(android.R.id.content, fragment)
+            .addToBackStack(null)
             .commit()
+        */
     }
 
     private fun carregarDesenvolvedoresOriginais() {
