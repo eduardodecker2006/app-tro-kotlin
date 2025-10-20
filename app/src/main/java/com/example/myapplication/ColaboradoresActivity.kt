@@ -1,40 +1,40 @@
 package com.example.myapplication
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity // MUDANÇA: de Fragment para AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri // 1. IMPORT NECESSÁRIO
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.models.Desenvolvedor
 import com.example.myapplication.models.TipoDesenvolvedor
 
-// MUDANÇA: Herda de AppCompatActivity e implementa DevActionsListener
+// Herda de AppCompatActivity e implementa DevActionsListener
 class ColaboradoresActivity : AppCompatActivity(), DevActionsListener {
 
     private lateinit var recyclerViewColaboradores: RecyclerView
     private lateinit var colaboradorAdapter: DesenvolvedorAdapter
     private lateinit var btnVoltar: ImageButton
 
-    // MUDANÇA: usa onCreate em vez de onCreateView
+    // usa onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // MUDANÇA: Define o layout da Activity
+        // Define o layout da Activity
         setContentView(R.layout.activity_colaboradores)
 
         // Configurar o Botão Voltar
         btnVoltar = findViewById(R.id.btn_voltar_colaboradores)
         btnVoltar.setOnClickListener {
-            // MUDANÇA: Em Activities, usamos finish() para voltar
+            // Em Activities, usamos finish() para voltar
             finish()
         }
 
         // Inicializar RecyclerView
         recyclerViewColaboradores = findViewById(R.id.recycler_view_colaboradores)
-        recyclerViewColaboradores.layoutManager = LinearLayoutManager(this) // MUDANÇA: usa 'this'
+        recyclerViewColaboradores.layoutManager = LinearLayoutManager(this) // usa 'this'
 
         // Carregar os dados
         val listaColaboradores = carregarColaboradores()
@@ -45,7 +45,7 @@ class ColaboradoresActivity : AppCompatActivity(), DevActionsListener {
     }
 
     private fun carregarColaboradores(): List<Desenvolvedor> {
-        // (Sua lista de colaboradores de antes)
+        // (Sua lista de colaboradores ATUALIZADA)
         return listOf(
             Desenvolvedor(
                 id = "c1",
@@ -104,7 +104,7 @@ class ColaboradoresActivity : AppCompatActivity(), DevActionsListener {
         }
 
         try {
-            // MUDANÇA: usa 'this' em vez de 'requireContext()'
+            // usa 'this' em vez de 'requireContext()'
             Toast.makeText(this, "Escolha seu aplicativo de email", Toast.LENGTH_SHORT).show()
             val chooser = Intent.createChooser(intent, "Enviar email usando:")
             startActivity(chooser)
@@ -119,7 +119,8 @@ class ColaboradoresActivity : AppCompatActivity(), DevActionsListener {
         Log.d("ColaboradoresActivity", "AÇÃO: onEmailClick recebido para email: $email")
 
         val intent = Intent(Intent.ACTION_SENDTO).apply {
-            data = Uri.parse("mailto:$email?subject=")
+            // 2. CORREÇÃO KTX
+            data = "mailto:$email?subject=".toUri()
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
 
@@ -134,19 +135,22 @@ class ColaboradoresActivity : AppCompatActivity(), DevActionsListener {
 
     override fun onGithubClick(githubUrl: String) {
         Log.d("ColaboradoresActivity", "GitHub click: $githubUrl")
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(githubUrl))
+        // 3. CORREÇÃO KTX
+        val intent = Intent(Intent.ACTION_VIEW, githubUrl.toUri())
         startActivity(intent)
     }
 
     override fun onLinkedinClick(linkedinUrl: String) {
         Log.d("ColaboradoresActivity", "LinkedIn click: $linkedinUrl")
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(linkedinUrl))
+        // 4. CORREÇÃO KTX
+        val intent = Intent(Intent.ACTION_VIEW, linkedinUrl.toUri())
         startActivity(intent)
     }
 
     override fun onInstagramClick(instagramUrl: String) {
         Log.d("ColaboradoresActivity", "Instagram click: $instagramUrl")
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(instagramUrl))
+        // 5. CORREÇÃO KTX
+        val intent = Intent(Intent.ACTION_VIEW, instagramUrl.toUri())
         startActivity(intent)
     }
 }
