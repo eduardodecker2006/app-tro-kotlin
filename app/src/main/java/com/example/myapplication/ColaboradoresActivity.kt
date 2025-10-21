@@ -70,6 +70,28 @@ class ColaboradoresActivity : AppCompatActivity(), DevActionsListener {
                 instagramUrl = "https://www.instagram.com/professor_xiru/"
             ),
             Desenvolvedor(
+                id = "c5",
+                nome = "Isis Duarte Bender",
+                fotoUrl = "ic_c5",
+                funcao = "Professora do Curso de Eletrônica",
+                tipo = TipoDesenvolvedor.PROFESSOR,
+                email = "isisbender@ifsul.edu.br",
+                githubUrl = null,
+                linkedinUrl = null,
+                instagramUrl = null
+            ),
+            Desenvolvedor(
+                id = "c6",
+                nome = "Sandro Vilela da Silva",
+                fotoUrl = "ic_c6",
+                funcao = "Professor do Curso de Eletrônica",
+                tipo = TipoDesenvolvedor.PROFESSOR,
+                email = "sandrosilva@ifsul.edu.br",
+                githubUrl = null,
+                linkedinUrl = null,
+                instagramUrl = null
+            ),
+            Desenvolvedor(
                 id = "c3",
                 nome = "Gustavo Buchweitz Giusti",
                 fotoUrl = "ic_c3",
