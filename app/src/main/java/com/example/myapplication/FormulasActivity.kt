@@ -11,6 +11,7 @@ import com.example.myapplication.adapters.FormulasAdapter
 import com.example.myapplication.models.FormulaX
 import com.example.myapplication.utils.DisciplinaJsonReader
 import android.util.Log
+import com.example.myapplication.utils.RecentFormulasManager
 
 class FormulasActivity : AppCompatActivity() {
 
@@ -65,61 +66,49 @@ class FormulasActivity : AppCompatActivity() {
         val disciplina = disciplinaJsonReader.loadDisciplina(this, fileName)
         val formulas = disciplina?.formulas ?: emptyList()
 
-        // 1. Preenche os dados de origem em cada fórmula
         formulas.forEachIndexed { index, formula ->
             formula.disciplinaOrigem = nomeDisciplina
             formula.arquivoJsonOrigem = fileName
             formula.indiceNoArray = index
         }
 
-        // 2. Atualiza o subtítulo
         val numFormulas = formulas.size
         tvSubtituloFormulas.text =
             if (numFormulas == 1) "1 fórmula disponível" else "$numFormulas fórmulas disponíveis"
 
-        // 3. Encontra o índice exato para focar (para expansão E sinalização)
         val indexParaFocar: Int = if (formulaFocoNome != null) {
-            if (formulaFocoIndice >= 0) {
-                // Busca por NOME e ÍNDICE (lógica correta)
-                formulas.indexOfFirst {
-                    it.name.equals(formulaFocoNome, ignoreCase = true) &&
-                            it.indiceNoArray == formulaFocoIndice
-                }
-            } else {
-                // Fallback: busca apenas pelo nome
-                formulas.indexOfFirst { it.name.equals(formulaFocoNome, ignoreCase = true) }
-            }
+            formulas.indexOfFirst { it.name.equals(formulaFocoNome, ignoreCase = true) }
         } else {
             -1 // Nenhum foco solicitado
         }
 
         Log.d("FormulasActivity",
-            "Buscando fórmula: nome='$formulaFocoNome', índice=$formulaFocoIndice, " +
+            "Buscando fórmula: nome='$formulaFocoNome', " +
                     "posição encontrada=$indexParaFocar")
 
-        // 4. Pré-expande a fórmula correta, se encontrada
         if (indexParaFocar != -1) {
-            // Isso garante que a fórmula correta já comece expandida
-            formulas[indexParaFocar].isExpanded = true
+            val focusedFormula = formulas[indexParaFocar]
+            focusedFormula.isExpanded = true
+
+
+            // Registra o acesso inicial à fórmula que veio da HomeTab.
+            registerRecentFormula(focusedFormula)
         }
 
-        // 5. Configurar o adapter
-        // MODIFICAÇÃO: Passamos o 'indexParaFocar' (Int) em vez de 'null' ou um nome.
-        // O adapter agora usará este índice para a animação de sinalização.
-        formulasAdapter = FormulasAdapter(this, formulas, indexParaFocar) { formula ->
-            android.util.Log.d("FormulasActivity", "Fórmula clicada: ${formula.name}")
+
+        // O lambda agora chama 'registerRecentFormula' quando uma fórmula é clicada na lista.
+        formulasAdapter = FormulasAdapter(this, formulas, indexParaFocar) { clickedFormula ->
+            Log.d("FormulasActivity", "Fórmula clicada: ${clickedFormula.name}")
+            registerRecentFormula(clickedFormula)
         }
         recyclerView.adapter = formulasAdapter
 
-        // 6. Executar a rolagem para o item focado
         if (indexParaFocar != -1) {
             recyclerView.post {
-                // Rola imediatamente para a posição
                 (recyclerView.layoutManager as? LinearLayoutManager)?.scrollToPosition(
                     indexParaFocar
                 )
-
-                // Post aninhado para centralizar após a primeira rolagem
+                // Seu código de rolagem complexa, que está correto, permanece aqui...
                 recyclerView.post {
                     val layoutManager =
                         recyclerView.layoutManager as? LinearLayoutManager ?: return@post
@@ -142,7 +131,17 @@ class FormulasActivity : AppCompatActivity() {
             }
         } else if (formulaFocoNome != null) {
             Log.w("FormulasActivity",
-                "⚠ Fórmula não encontrada: nome='$formulaFocoNome', índice=$formulaFocoIndice")
+                "⚠ Fórmula não encontrada: nome='$formulaFocoNome'")
         }
+    }
+
+    /**
+     * Registra uma fórmula como acessada recentemente usando o RecentFormulasManager.
+     * @param formula
+     */
+    private fun registerRecentFormula(formula: FormulaX) {
+        val formulaId = formula.getUniqueId()
+        RecentFormulasManager.addFormula(this, formulaId)
+        Log.i("RecentFormulas", "Fórmula '${formula.name}' (ID: $formulaId) registrada como recente.")
     }
 }

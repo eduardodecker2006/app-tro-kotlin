@@ -50,6 +50,7 @@
 
             </androidx.cardview.widget.CardView>
 
+
             <!-- Favoritos -->
             <TextView
                 android:id="@+id/tv_favorites_title"
@@ -65,6 +66,33 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_favorites_carousel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_favorite_card"
+                tools:visibility="visible" />
+
+            <!-- TÍTULO DOS ACESSADOS RECENTEMENTE -->
+            <TextView
+                android:id="@+id/tv_recents_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Últimos Acessos"
+                android:fontFamily="@font/audiowide"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <!-- CARROSSEL DE ACESSADOS RECENTEMENTE -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_recents_carousel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
