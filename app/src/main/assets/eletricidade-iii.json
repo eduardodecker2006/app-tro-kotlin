@@ -33,7 +33,7 @@
       "latex": ["I = \\omega \\times C \\times V"],
       "constants":
       {
-        "ω": "Frequência angular (rad/s)"
+        "ω": "Frequência Angular (rad/s)"
       },
 
       "variables":
@@ -50,7 +50,7 @@
       "latex": ["V = \\omega \\times L \\times I"],
       "constants":
       {
-        "ω": "Frequência angular (rad/s)"
+        "ω": "Frequência Angular (rad/s)"
       },
 
       "variables":
@@ -69,7 +69,7 @@
       "latex": ["X_C = \\frac{1}{\\omega \\times C}"],
       "constants":
       {
-        "ω": "Frequência angular (rad/s)"
+        "ω": "Frequência Angular (rad/s)"
       },
 
       "variables":
@@ -86,7 +86,7 @@
       "latex": ["X_C = \\frac{1}{\\omega \\times C}", "X_C = \\frac{1}{2 \\times \\pi \\times f \\times C}"],
       "constants":
       {
-        "ω": "Frequência angular (rad/s)"
+        "ω": "Frequência Angular (rad/s)"
       },
 
       "variables":
@@ -104,7 +104,7 @@
       "latex": ["X_L = \\omega \\times L", "X_L = 2 \\times \\pi \\times f \\times L"],
       "constants":
       {
-        "ω": "Frequência angular (rad/s)",
+        "ω": "Frequência Angular (rad/s)",
         "π": "3,14"
       },
 
@@ -122,7 +122,7 @@
       "latex": ["V_T = \\sqrt{(V_R)^2 + (V_C)^2}", "\\sin{\\phi} = \\frac{V_C}{V}","\\cos{\\phi} = \\frac{V_R}{V},","\\tan{\\phi} = \\frac{V_C}{V_R}"],
       "constants":
       {
-        "ϕ": "Ângulo de fase"
+        "ϕ": "Ângulo de Fase"
       },
       "variables":
       {
@@ -137,7 +137,7 @@
       "latex": ["Z = \\sqrt{R^2 + X_C^2}", "\\sin{\\phi} = \\frac{X_C}{Z}","\\cos{\\phi} = \\frac{R}{Z},","\\tan{\\phi} = \\frac{X_C}{R}"],
       "constants":
       {
-        "ϕ": "Ângulo de fase"
+        "ϕ": "Ângulo de Fase"
       },
       "variables":
       {
@@ -152,7 +152,7 @@
       "latex": ["V_T = \\sqrt{(V_R)^2 + (V_L)^2}", "\\sin{\\phi} = \\frac{V_L}{V}","\\cos{\\phi} = \\frac{V_R}{V},","\\tan{\\phi} = \\frac{V_L}{V_R}"],
       "constants":
       {
-        "ϕ": "Ângulo de fase"
+        "ϕ": "Ângulo de Fase"
       },
       "variables":
       {
@@ -167,7 +167,7 @@
       "latex": ["Z = \\sqrt{R^2 + X_L^2}", "\\sin{\\phi} = \\frac{X_L}{Z}","\\cos{\\phi} = \\frac{R}{Z},","\\tan{\\phi} = \\frac{X_L}{R}", "\\phi"],
       "constants":
       {
-        "ϕ": "Ângulo de fase"
+        "ϕ": "Ângulo de Fase"
       },
       "variables":
       {
@@ -195,7 +195,7 @@
       "latex": ["V_T = \\sqrt{(V_R)^2 + (V_L)^2 + (V_C)^2}", "\\sin{\\phi} = \\frac{|V_L - V_C|}{V}","\\cos{\\phi} = \\frac{V_R}{V},","\\tan{\\phi} = \\frac{|V_L - V_C|}{V_R}"],
       "constants":
       {
-        "ϕ": "Ângulo de fase"
+        "ϕ": "Ângulo de Fase"
       },
       "variables":
       {
@@ -210,7 +210,7 @@
       "latex": ["Z = \\sqrt{R^2 + (X_L - X_C)^2}", "\\sin{\\phi} = \\frac{|X_L - X_C|}{Z}","\\cos{\\phi} = \\frac{R}{Z},","\\tan{\\phi} = \\frac{|X_L - X_C|}{R}"],
       "constants":
       {
-        "ϕ": "Ângulo de fase"
+        "ϕ": "Ângulo de Fase"
       },
       "variables":
       {
@@ -241,7 +241,7 @@
       "latex": ["I^2 = I_R^2 + ( I_C - I_L )^2", "\\sin{\\phi} = \\frac{|I_C - I_L|}{I}","\\cos{\\phi} = \\frac{I_R}{I},","\\tan{\\phi} = \\frac{|I_C - I_L|}{I_R}"],
       "constants":
       {
-        "ϕ": "Ângulo de fase"
+        "ϕ": "Ângulo de Fase"
       },
       "variables":
       {
@@ -257,7 +257,7 @@
       "latex": ["Y^2 = g^2 + (b_C - b_L)^2", "\\sin{\\phi} = \\frac{|b_C - b_L|}{Y}","\\cos{\\phi} = \\frac{g}{Y},","\\tan{\\phi} = \\frac{|b_C - b_L|}{g}"],
       "constants":
       {
-        "ϕ": "Ângulo de fase"
+        "ϕ": "Ângulo de Fase"
       },
       "variables":
       {
@@ -667,7 +667,7 @@
       }
     },
     {
-      "name":"Fase 1",
+      "name":"Fase 1 (Alternador Trifásico)",
       "description":"Alternador Trifásico Bipolar Induzido Rotativo",
       "latex": ["e\\_1 = E_M \\times \\sin{\\theta}"],
       "constants":null,
@@ -679,7 +679,7 @@
       }
     },
     {
-      "name":"Fase 2",
+      "name":"Fase 2 (Alternador Trifásico)",
       "description":"Alternador Trifásico Bipolar Induzido Rotativo",
       "latex": ["e\\_2 = E_M \\times \\sin{(\\theta - 120^\\circ)}"],
       "constants":null,
@@ -691,7 +691,7 @@
       }
     },
     {
-      "name":"Fase 3",
+      "name":"Fase 3 (Alternador Trifásico)",
       "description":"Alternador Trifásico Bipolar Induzido Rotativo",
       "latex": ["e\\_3 = E_M \\times \\sin{(\\theta - 240^\\circ)}"],
       "constants":null,
@@ -830,7 +830,7 @@
   "references":null,
   "images":null,
   "tags": ["Indutância","Frequência","Frequência Angular","tensão média","eletricidade", "associação de indutores","indutores","indutor", "tensão", "corrente", "potência","Lei de Lenz","espiras","Força Magnética","eletromotriz","Indução Magnética","Fluxo magnético","Lei de Faraday"],
-  "alias": ["eletricidade", "eletricidade II", "eletricidade 2","Eletricidade ii","ele ii","Ele II","eletricidade2"],
+  "alias": ["eletricidade", "eletricidade III", "eletricidade 3","Eletricidade iii","ele iii","Ele III","eletricidade3","ele3", "ele 3"],
   "articleWriters": [
     {
       "formulas": [
@@ -845,10 +845,10 @@
       "json": [
         {
           "name": "Carlos Alexandre Dutra Volz",
-          "roles": ["Desenvolvedor", "Estudante de Eletrônica"],
+          "roles": ["Desenvolvedor","Code Review", "Estudante de Eletrônica"],
           "email": null,
           "github":null,
-          "date": "2025-05-04"
+          "date": "2025-10-24"
         }
       ]
 
