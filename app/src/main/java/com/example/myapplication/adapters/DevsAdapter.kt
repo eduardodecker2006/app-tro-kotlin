@@ -66,7 +66,7 @@ class DesenvolvedorAdapter(
 
             val fotoUrl = desenvolvedor.fotoUrl
             val placeholderDrawable = R.drawable.ic_devdefault // Seu drawable padrão
-            
+
             Glide.with(itemView.context).clear(imgFoto)
 
             imgFoto.setImageResource(placeholderDrawable)
@@ -75,7 +75,7 @@ class DesenvolvedorAdapter(
                 val requestOptions = RequestOptions()
                     .placeholder(placeholderDrawable)
                     .error(placeholderDrawable)
-                    .dontAnimate() // CORREÇÃO: Desabilitar animações para evitar conflitos
+                    .dontAnimate()
 
                 if (fotoUrl.startsWith("http://") || fotoUrl.startsWith("https://")) {
                     // Carregar de URL da Internet
