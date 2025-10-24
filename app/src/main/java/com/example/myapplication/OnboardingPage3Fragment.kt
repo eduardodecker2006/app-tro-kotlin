@@ -28,12 +28,11 @@ class OnboardingPage3Fragment : Fragment() {
         val nameEditText = view.findViewById<TextInputEditText>(R.id.name_edit_text)
 
         finishButton.setOnClickListener {
-            // 1. Pega o nome digitado e remove espaços em branco extras
+
             val userName = nameEditText.text.toString().trim()
 
-            // 2. Valida se o nome não está vazio
             if (userName.isEmpty()) {
-                // Mostra uma mensagem de erro no campo de texto
+
                 nameInputLayout.error = "Por favor, digite seu nome."
                 return@setOnClickListener
             }

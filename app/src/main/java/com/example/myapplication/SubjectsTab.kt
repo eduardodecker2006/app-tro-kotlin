@@ -140,15 +140,14 @@ class SubjectsTab : Fragment() {
         Log.d("DISCIPLINA_CLICK", "Clicou na disciplina: ${disciplina.name}")
 
         try {
-            // --- A CORREÇÃO ESTÁ AQUI ---
-            // Constrói o nome do arquivo a partir do slug (ex: "analise-de-circuitos-i" -> "analise-de-circuitos-i.json")
+
             val fileName = "${disciplina.slug}.json"
 
-            // Cria o intent explícito para a FormulasActivity
+
             val intent = Intent(requireContext(), FormulasActivity::class.java).apply {
-                // Passa o nome do arquivo JSON, que é o método unificado de carregamento
+
                 putExtra("disciplina_arquivo_json", fileName)
-                // Passa o nome da disciplina para ser usado como título na próxima tela
+
                 putExtra("disciplina_nome", disciplina.name)
             }
             startActivity(intent)
@@ -182,16 +181,11 @@ class SubjectsTab : Fragment() {
         showEmptyState()
     }
 
-    /**
-     * Função pública para recarregar disciplinas (pode ser chamada de zfora)
-     */
+
     fun refreshDisciplinas() {
         loadDisciplinas()
     }
 
-    /**
-     * Função para obter disciplina por slug (útil para outras partes do app)
-     */
     fun getDisciplinaBySlug(slug: String): Subjects? {
         return disciplinas.find { it.slug == slug }
     }

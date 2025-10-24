@@ -12,9 +12,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.SearchView
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.adapters.FavoritesCarouselAdapter
@@ -23,9 +23,11 @@ import com.example.myapplication.models.FormulaX
 import com.example.myapplication.models.SearchableItem
 import com.example.myapplication.utils.DisciplinaJsonReader
 import com.example.myapplication.utils.FavoritesManager
+import com.example.myapplication.utils.RecentFormulasManager
 import java.util.Locale
 
 class HomeTab : Fragment() {
+
 
     data class PhrasePair(val phrase: String, val emoji: String)
     private val phrasePairs = listOf(
@@ -56,6 +58,11 @@ class HomeTab : Fragment() {
     private lateinit var tvFavoritesTitle: TextView
     private var allFormulas: List<FormulaX>? = null
 
+
+    private lateinit var rvRecentsCarousel: RecyclerView
+    private lateinit var tvRecentsTitle: TextView
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadAllContentFromAssets()
@@ -73,11 +80,17 @@ class HomeTab : Fragment() {
         setupGreetingMessage(view)
         setupSearch(view)
         setupFavoritesCarousel(view)
+
+        setupRecentsCarousel(view)
+
     }
 
     override fun onResume() {
         super.onResume()
         displayFavorites()
+
+        displayRecents()
+
     }
 
     private fun setupGreetingMessage(view: View) {
@@ -121,6 +134,40 @@ class HomeTab : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
     }
 
+       private fun setupRecentsCarousel(view: View) {
+        tvRecentsTitle = view.findViewById(R.id.tv_recents_title)
+        rvRecentsCarousel = view.findViewById(R.id.rv_recents_carousel)
+        rvRecentsCarousel.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+    }
+
+    private fun displayRecents() {
+        if (!isAdded) return
+
+          val recentFormulaIds = RecentFormulasManager.getRecentFormulas(requireContext())
+
+          if (recentFormulaIds.isEmpty() || allFormulas == null) {
+            tvRecentsTitle.visibility = View.GONE
+            rvRecentsCarousel.visibility = View.GONE
+            return
+        }
+
+        val recentFormulas = recentFormulaIds.mapNotNull { formulaId ->
+            allFormulas!!.find { it.getUniqueId() == formulaId }
+        }
+
+        if (recentFormulas.isNotEmpty()) {
+            tvRecentsTitle.visibility = View.VISIBLE
+            rvRecentsCarousel.visibility = View.VISIBLE
+
+            val recentsAdapter = FavoritesCarouselAdapter(requireContext(), recentFormulas)
+            rvRecentsCarousel.adapter = recentsAdapter
+        } else {
+            tvRecentsTitle.visibility = View.GONE
+            rvRecentsCarousel.visibility = View.GONE
+        }
+    }
+
     private fun displayFavorites() {
         if (!isAdded) return
 
@@ -141,19 +188,16 @@ class HomeTab : Fragment() {
             return
         }
 
-        // Debug: Verificar IDs de todas as fórmulas carregadas
         Log.d("HomeTab_Favorites", "--- Fórmulas Carregadas (primeiras 5) ---")
         allFormulas!!.take(5).forEach { formula ->
             Log.d("HomeTab_Favorites", "Nome: '${formula.name}', ID Único: '${formula.getUniqueId()}'")
         }
 
-        // Criar um mapa de IDs únicos para evitar duplicatas
-        val favoriteFormulaObjects = favoriteIds.mapNotNull { favoriteId ->
+       val favoriteFormulaObjects = favoriteIds.mapNotNull { favoriteId ->
             allFormulas!!.find { formula ->
                 formula.getUniqueId() == favoriteId
             }
         }.also { formulas ->
-            // Debug: log das fórmulas encontradas
             Log.d("HomeTab_Favorites", "Total de favoritos filtrados (sem duplicatas): ${formulas.size}")
             formulas.forEach { formula ->
                 Log.d("HomeTab_Favorites", "✓ MATCH: '${formula.name}' (ID: '${formula.getUniqueId()}')")
@@ -187,12 +231,10 @@ class HomeTab : Fragment() {
             fileNames?.forEach { fileName ->
                 val subject = disciplinaReader.loadDisciplina(requireContext(), fileName)
                 if (subject?.formulas != null) {
-                    // *** CRÍTICO: Use forEachIndexed para ter acesso ao índice ***
                     subject.formulas.forEachIndexed { index, formula ->
-                        // *** PREENCHE OS 3 CAMPOS OBRIGATÓRIOS ***
                         formula.disciplinaOrigem = subject.name
                         formula.arquivoJsonOrigem = fileName
-                        formula.indiceNoArray = index  // ← ESTE ERA O PROBLEMA!
+                        formula.indiceNoArray = index
 
                         tempAllFormulas.add(formula)
 
@@ -222,7 +264,6 @@ class HomeTab : Fragment() {
 
             Log.d("HomeTab_Loader", "Carregou com sucesso ${allFormulas?.size} fórmulas.")
 
-            // Debug das primeiras 3 fórmulas
             allFormulas?.take(3)?.forEach { formula ->
                 Log.d("HomeTab_Loader",
                     "Fórmula: '${formula.name}', Arquivo: '${formula.arquivoJsonOrigem}', " +
@@ -253,6 +294,7 @@ class HomeTab : Fragment() {
 
     private fun navigateToFormulas(item: SearchableItem) {
         try {
+
             val intent = Intent(requireContext(), FormulasActivity::class.java).apply {
                 putExtra("disciplina_arquivo_json", item.sourceFile)
                 putExtra("disciplina_nome", item.description)
