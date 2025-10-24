@@ -23,8 +23,8 @@
           "variables":
           {
             "BW": "Largura de banda (Hertz = Hz)",
-            "fcs": "Frequencia de Corte superior (Hertz = Hz)",
-            "fci": "Frequencia de Corte inferior (Hertz = Hz)"
+            "fcs": "Frequência de Corte Superior (Hertz = Hz)",
+            "fci": "Frequência de Corte Inferior (Hertz = Hz)"
           }
         },
         {
@@ -35,8 +35,8 @@
 
             "variables":
             {
-                 "BW": "Largura de banda (Hertz = Hz)",
-                 "fo": "Frequencia de saida (Hertz = Hz)",
+                 "BW": "Largura de Banda (Hertz = Hz)",
+                 "fo": "Frequência de Saída (Hertz = Hz)",
                  "Qo": "Fator de Qualidade"
             }
         },
@@ -48,8 +48,8 @@
 
             "variables":
             {
-                "ωcs": "Frequencia angular de corte superior (Radiano por segundo = rad/s)",
-                "ωo": "Frequência Angular (Radiano por segundo = rad/s)",
+                "ωcs": "Frequência Angular de Corte Superior (Radiano por Segundo = rad/s)",
+                "ωo": "Frequência Angular (Radiano por Segundo = rad/s)",
                 "Qo": "Fator de Qualidade"
             }
         },
@@ -61,8 +61,8 @@
 
             "variables":
             {
-                "ωci": "Frequencia angular de corte inferior (Radiano por segundo = rad/s)",
-                "ωo": "Frequência Angular (Radiano por segundo = rad/s)",
+                "ωci": "Frequência Angular de Corte Inferior (Radiano por Segundo = rad/s)",
+                "ωo": "Frequência Angular (Radiano por Segundo = rad/s)",
                  "Qo": "Fator de Qualidade"
             }
         },
@@ -76,13 +76,13 @@
             {
                  "|H(jw)|": "Resposta em Magnitude",
                  "K PB": "Ganho",
-                 "ω": "Frequência Angular (Radiano por segundo = rad/s)",
-                 "ωc": "Frequência Angular de Corte (Radiano por segundo = rad/s)",
+                 "ω": "Frequência Angular (Radiano por Segundo = rad/s)",
+                 "ωc": "Frequência Angular de Corte (Radiano por Segundo = rad/s)",
                  "n": "Ordem do Filtro Butterworth"
             }
         },
         {
-            "name": "Função Resposta (Filtro Butterworth)(alternativa 1)",
+            "name": "Função Resposta (Filtro Butterworth)(Alternativa 1)",
             "description":"se W >= 10 x Wc, filtro butterworth",
             "latex": ["\\left| H(j\\omega) \\right| \\approx K_{PB} \\times \\left( \\frac{\\omega_c}{\\omega} \\right)^n"],
             "constants":null,
@@ -91,8 +91,8 @@
             {
                 "|Hjw|": "Resposta em Magnitude",
                 "K PB": "Ganho",
-                "ω": "Frequência Angular (Radiano por segundo = rad/s)",
-                "ωc": "Frequência Angular de Corte (Radiano por segundo = rad/s)",
+                "ω": "Frequência Angular (Radiano por Segundo = rad/s)",
+                "ωc": "Frequência Angular de Corte (Radiano por Segundo = rad/s)",
                 "n": "Ordem do Filtro"
             }
         },
@@ -104,10 +104,10 @@
 
             "variables":
             {
-                "|Hjw|dB": "Resposta em Magnitude em (decibéis = dB)",
+                "|Hjw|dB": "Resposta em Magnitude em (Decibéis = dB)",
                 "K PB": "Ganho",
-                "ω": "Frequência Angular (Radiano por segundo = rad/s)",
-                "ωc": "Frequência Angular de Corte (Radiano por segundo = rad/s)",
+                "ω": "Frequência Angular (Radiano por Segundo = rad/s)",
+                "ωc": "Frequência Angular de Corte (Radiano por Segundo = rad/s)",
                 "n": "Ordem do Filtro"
             }
         },
@@ -120,8 +120,8 @@
             "variables":
             {
                 "TA": "Taxa de Atenuação (dB)",
-                "ω": "Frequência Angular (Radiano por segundo = rad/s)",
-                "ωc": "Frequência Angular de Corte (Radiano por segundo = rad/s)",
+                "ω": "Frequência Angular (Radiano por Segundo = rad/s)",
+                "ωc": "Frequência Angular de Corte (Radiano por Segundo = rad/s)",
                 "n": "Ordem do Filtro"
             }
         },
@@ -136,9 +136,9 @@
                 "|Hjw|": "Resposta em Magnitude",
                 "K PB": "Ganho",
                 "Cn": "Polinômio de Chebyshev",
-                "E": "Fator de amplitude Máxima do Ripple",
-                "ω": "Frequência Angular (Radiano por segundo = rad/s)",
-                "ωc": "Frequência Angular de Corte (Radiano por segundo = rad/s)"
+                "E": "Fator de Amplitude Máxima do Ripple",
+                "ω": "Frequência Angular (Radiano por Segundo = rad/s)",
+                "ωc": "Frequência Angular de Corte (Radiano por Segundo = rad/s)"
             }
         },
         {
@@ -180,10 +180,10 @@
             "variables":
             {
                 "TA": "Taxa de atenuação (dB)",
-                "E": "Fator de amplitude Máxima do Ripple",
+                "E": "Fator de Amplitude Máxima do Ripple",
                 "n": "Ordem do Filtro",
-                "ω": "Frequência Angular (Radiano por segundo = rad/s)",
-                "ωc": "Frequência Angular de Corte (Radiano por segundo = rad/s)"
+                "ω": "Frequência Angular (Radiano por Segundo = rad/s)",
+                "ωc": "Frequência Angular de Corte (Radiano por Segundo = rad/s)"
             }
         },
         {
@@ -285,7 +285,7 @@
             "variables":
             {
               "C": "Capacitor (Farad = F)",
-              "Fc": "Frequência de corte (Frequência = Hz)"
+              "Fc": "Frequência de Corte (Frequência = Hz)"
             }
         },
         {
@@ -411,7 +411,7 @@
             "variables":
             {
               "R2": "Resistor (Ohm = Ω)",
-              "K":   "Ganho do Filtro",
+              "K": "Ganho do Filtro",
               "C1": "Capacitor (Farad = F)",
               "C2": "Capacitor (Farad = F)",
               "a": "Coeficiente Polinomial 'a'",
