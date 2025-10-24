@@ -588,7 +588,7 @@
       "variables":
       {
         "S": "Potência aparente (Volt-Ampere = VA)",
-        "P_ap": "Potência aparente (Volt-Ampere = VA)",
+        "Pap": "Potência aparente (Volt-Ampere = VA)",
         "V": "Tensão eficaz (Volt = V)",
         "I": "Corrente eficaz (Ampere = A)"
       }
@@ -603,7 +603,7 @@
         "QC": "Potência reativa do capacitor (VAr)",
         "P": "Potência ativa (W)",
         "ϕ": "Ângulo de defasagem inicial",
-        "ϕ_1": "Ângulo de defasagem desejado"
+        "ϕ1": "Ângulo de defasagem desejado"
       }
     },
     {
@@ -673,8 +673,8 @@
       "constants":null,
       "variables":
       {
-        "e_1": "Tensão instantânea da fase 1 (Volt = V)",
-        "E_M": "Tensão máxima (pico) (Volt = V)",
+        "e1": "Tensão instantânea da fase 1 (Volt = V)",
+        "EM": "Tensão máxima (pico) (Volt = V)",
         "θ": "Ângulo (graus ou radianos)"
       }
     },
@@ -685,8 +685,8 @@
       "constants":null,
       "variables":
       {
-        "e_2": "Tensão instantânea da fase 2 (Volt = V)",
-        "E_M": "Tensão máxima (pico) (Volt = V)",
+        "e2": "Tensão instantânea da fase 2 (Volt = V)",
+        "EM": "Tensão máxima (pico) (Volt = V)",
         "θ": "Ângulo (graus ou radianos)"
       }
     },
@@ -697,8 +697,8 @@
       "constants":null,
       "variables":
       {
-        "e_3": "Tensão instantânea da fase 3 (Volt = V)",
-        "E_M": "Tensão máxima (pico) (Volt = V)",
+        "e3": "Tensão instantânea da fase 3 (Volt = V)",
+        "EM": "Tensão máxima (pico) (Volt = V)",
         "θ": "Ângulo (graus ou radianos)"
       }
     },
@@ -709,10 +709,10 @@
       "constants":null,
       "variables":
       {
-        "I_N": "Corrente na ligação estrela (Ampere = A)",
-        "I_L1": "Corrente da fase 1 (Ampere = A)",
-        "I_L2": "Corrente da fase 2 (Ampere = A)",
-        "I_L3": "Corrente da fase 3 (Ampere = A)"
+        "IN":  "Corrente na ligação estrela (Ampere = A)",
+        "IL1": "Corrente da fase 1 (Ampere = A)",
+        "IL2": "Corrente da fase 2 (Ampere = A)",
+        "IL3": "Corrente da fase 3 (Ampere = A)"
       }
     },
     {
@@ -722,8 +722,8 @@
       "constants":null,
       "variables":
       {
-        "V_L": "Tensão entre linhas (Volt = V)",
-        "V_F": "Tensão de fase (Volt = V)"
+        "VL": "Tensão entre linhas (Volt = V)",
+        "VF": "Tensão de fase (Volt = V)"
       }
     },
     {
@@ -733,8 +733,8 @@
       "constants":null,
       "variables":
       {
-        "V_L": "Tensão entre linhas (Volt = V)",
-        "V_F": "Tensão de fase (Volt = V)"
+        "VL": "Tensão entre linhas (Volt = V)",
+        "VF": "Tensão de fase (Volt = V)"
       }
     },
     {
@@ -744,8 +744,8 @@
       "constants":null,
       "variables":
       {
-        "I_L": "Corrente entre linhas (Ampere = A)",
-        "I_F": "Corrente de fase (Ampere = A)"
+        "IL": "Corrente entre linhas (Ampere = A)",
+        "IF": "Corrente de fase (Ampere = A)"
       }
     },
     {
@@ -755,9 +755,9 @@
       "constants":null,
       "variables":
       {
-        "S_T": "Potência aparente total (Volt-Ampere = VA)",
-        "V_L": "Tensão entre linhas (Volt = V)",
-        "I_L": "Corrente entre linhas (Ampere = A)"
+        "ST": "Potência aparente total (Volt-Ampere = VA)",
+        "VL": "Tensão entre linhas (Volt = V)",
+        "IL": "Corrente entre linhas (Ampere = A)"
       }
     },
     {
@@ -767,8 +767,8 @@
       "constants":null,
       "variables":
       {
-        "P_T": "Potência ativa total (Watt = W)",
-        "S_T": "Potência aparente total (Volt-Ampere = VA)",
+        "PT": "Potência ativa total (Watt = W)",
+        "ST": "Potência aparente total (Volt-Ampere = VA)",
         "ϕ": "Ângulo de defasagem entre tensão e corrente"
       }
     },
@@ -779,8 +779,8 @@
       "constants":null,
       "variables":
       {
-        "Q_T": "Potência reativa total (Volt-Ampere reativo = VAR)",
-        "S_T": "Potência aparente total (Volt-Ampere = VA)",
+        "QT": "Potência reativa total (Volt-Ampere reativo = VAR)",
+        "ST": "Potência aparente total (Volt-Ampere = VA)",
         "ϕ": "Ângulo de defasagem entre tensão e corrente"
       }
     },
@@ -791,10 +791,10 @@
       "constants":null,
       "variables":
       {
-        "Q_C": "Potência reativa do capacitor (Volt-Ampere reativo = VAr)",
-        "P_T": "Potência ativa total (Watt = W)",
+        "QC": "Potência reativa do capacitor (Volt-Ampere reativo = VAr)",
+        "PT": "Potência ativa total (Watt = W)",
         "ϕ": "Ângulo de defasagem entre tensão e corrente",
-        "ϕ_1": "Ângulo de defasagem após a correção"
+        "ϕ1": "Ângulo de defasagem após a correção"
       }
     },
     {
@@ -805,8 +805,8 @@
       "variables":
       {
         "CF": "Capacitância de cada capacitor da fase (Farad = F)",
-        "Q_CF": "Potência reativa do capacitor (Volt-Ampere reativo = VAr)",
-        "V_F": "Tensão de fase (Volt = V)",
+        "QCF": "Potência reativa do capacitor (Volt-Ampere reativo = VAr)",
+        "VF": "Tensão de fase (Volt = V)",
         "f": "Frequência (Hertz = Hz)"
       }
     }
@@ -830,7 +830,7 @@
   "references":null,
   "images":null,
   "tags": ["Indutância","Frequência","Frequência Angular","tensão média","eletricidade", "associação de indutores","indutores","indutor", "tensão", "corrente", "potência","Lei de Lenz","espiras","Força Magnética","eletromotriz","Indução Magnética","Fluxo magnético","Lei de Faraday"],
-  "alias": ["eletricidade", "eletricidade II", "eletricidade 2","Eletricidade ii","ele ii","Ele II","eletricidade2"],
+  "alias": ["eletricidade", "eletricidade III", "eletricidade 3","Eletricidade iii","ele iii","Ele III","eletricidade3","eleiii","ele3"],
   "articleWriters": [
     {
       "formulas": [
