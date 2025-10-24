@@ -95,8 +95,6 @@ class FormulasActivity : AppCompatActivity() {
             registerRecentFormula(focusedFormula)
         }
 
-
-        // O lambda agora chama 'registerRecentFormula' quando uma fórmula é clicada na lista.
         formulasAdapter = FormulasAdapter(this, formulas, indexParaFocar) { clickedFormula ->
             Log.d("FormulasActivity", "Fórmula clicada: ${clickedFormula.name}")
             registerRecentFormula(clickedFormula)
@@ -108,7 +106,7 @@ class FormulasActivity : AppCompatActivity() {
                 (recyclerView.layoutManager as? LinearLayoutManager)?.scrollToPosition(
                     indexParaFocar
                 )
-                // Seu código de rolagem complexa, que está correto, permanece aqui...
+
                 recyclerView.post {
                     val layoutManager =
                         recyclerView.layoutManager as? LinearLayoutManager ?: return@post

@@ -10,7 +10,6 @@ import com.example.myapplication.models.SearchableItem
 
 class SearchAdapter(
     private var itemList: List<SearchableItem>,
-    // Adiciona um parâmetro para o listener de clique
     private val onItemClicked: (SearchableItem) -> Unit
 ) : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
@@ -28,8 +27,6 @@ class SearchAdapter(
         val item = itemList[position]
         holder.title.text = item.title
         holder.description.text = item.description
-
-        // Configura o clique para o item inteiro
         holder.itemView.setOnClickListener {
             onItemClicked(item)
         }

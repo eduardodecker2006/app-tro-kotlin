@@ -35,20 +35,12 @@ import java.io.InputStreamReader
 class FormulasAdapter(
     private val context: Context,
     private val formulas: List<FormulaX>,
-    // MODIFICAÇÃO: Trocamos o 'formulaFocoNome' (String) pelo 'formulaFocoIndice' (Int)
-    // Isso nos dá a posição exata para a animação de destaque.
     private val formulaFocoIndice: Int,
     private val onFormulaClick: (FormulaX) -> Unit
 ) : RecyclerView.Adapter<FormulasAdapter.FormulaViewHolder>() {
 
-
-    // MODIFICAÇÃO: O 'targetPosition' agora usa o 'formulaFocoIndice' que recebemos.
-    // Não precisamos mais procurar pelo nome.
     private val targetPosition = formulaFocoIndice
-
-    // ID único para a animação
     private var animationId = System.currentTimeMillis()
-    // Guarda qual ID foi animado
     private var animatedId: Long? = null
 
     private val defaultBackgroundColor: Int by lazy {
@@ -106,7 +98,6 @@ class FormulasAdapter(
         private val constantsListTextView: TextView = view.findViewById(R.id.tv_constants_list)
         private val separatorView: View = view.findViewById(R.id.separator_variables_constants)
 
-        // Suas Views existentes
         val cardView: CardView = view as CardView
         val contentLayout: LinearLayout = view.findViewById<LinearLayout>(R.id.contentLayout)
         val formulaName: TextView = view.findViewById(R.id.tv_formula_name)
@@ -153,8 +144,6 @@ class FormulasAdapter(
             constantsListTextView.text = formatTermsForDisplay(formula.constants)
 
             isFormulaRendered = false
-            // A lógica de expansão agora depende apenas do 'isExpanded'
-            // que a FormulasActivity definiu.
             updateExpandCollapseUI(formula)
 
             cardView.setOnClickListener {
@@ -284,8 +273,6 @@ class FormulasAdapter(
         holder.contentLayout.setBackgroundColor(defaultBackgroundColor)
         holder.contentLayout.tag = null
 
-        // A lógica de destaque (sinalização) não muda.
-        // Ela agora funciona corretamente pois 'targetPosition' é o índice exato.
         if (position == targetPosition && targetPosition != -1 && animatedId == null) {
             animatedId = animationId
             holder.contentLayout.tag = animationId

@@ -22,17 +22,11 @@ class FavoritesCarouselAdapter(
     private val favoriteFormulas: List<FormulaX>
 ) : RecyclerView.Adapter<FavoritesCarouselAdapter.FavoriteViewHolder>() {
 
-    /**
-     * ViewHolder que representa um único card no carrossel de favoritos.
-     */
     inner class FavoriteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val nameTextView: TextView = itemView.findViewById(R.id.tv_favorite_formula_name)
         private val subjectNameTextView: TextView = itemView.findViewById(R.id.tv_favorite_subject_name)
 
-        /**
-         * Preenche o card com os dados da fórmula e configura a ação de clique.
-         */
         fun bind(formula: FormulaX) {
             nameTextView.text = formula.name
             subjectNameTextView.text = formula.disciplinaOrigem
@@ -52,15 +46,15 @@ class FavoritesCarouselAdapter(
 
                 Log.d("FavoritesClick", "Clicou em '${formula.name}'. Navegando para a disciplina '${formula.disciplinaOrigem}' usando o arquivo '${formula.arquivoJsonOrigem}'.")
 
-                // Cria um Intent para abrir a FormulasActivity, passando os dados necessários
+
                 val intent = Intent(context, FormulasActivity::class.java).apply {
-                    // Passa o nome do arquivo JSON da disciplina
+
                     putExtra("disciplina_arquivo_json", formula.arquivoJsonOrigem)
-                    // Passa o nome da disciplina para ser exibido na toolbar
+
                     putExtra("disciplina_nome", formula.disciplinaOrigem)
-                    // *** MUDANÇA CRÍTICA: Passa o nome DA FÓRMULA para scroll ***
+
                     putExtra("formula_nome_foco", formula.name)
-                    // *** NOVO: Passa o ÍNDICE da fórmula para identificação única ***
+
                     putExtra("formula_indice_foco", formula.indiceNoArray)
                 }
                 // Inicia a activity

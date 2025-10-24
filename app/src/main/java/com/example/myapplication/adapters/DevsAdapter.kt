@@ -58,7 +58,7 @@ class DesenvolvedorAdapter(
         private val btnInstagram: ImageButton = itemView.findViewById(R.id.btn_desenvolvedor_instagram)
 
         fun bind(desenvolvedor: Desenvolvedor, listener: DevActionsListener?) {
-            // LOG
+
             Log.d("DevAdapter_bind", "Binding - Nome: ${desenvolvedor.nome}, FotoString: ${desenvolvedor.fotoUrl}")
 
             tvNome.text = desenvolvedor.nome
@@ -66,11 +66,9 @@ class DesenvolvedorAdapter(
 
             val fotoUrl = desenvolvedor.fotoUrl
             val placeholderDrawable = R.drawable.ic_devdefault // Seu drawable padrão
-
-            // CORREÇÃO PRINCIPAL: Cancelar qualquer carregamento anterior do Glide
+            
             Glide.with(itemView.context).clear(imgFoto)
 
-            // CORREÇÃO: Definir imagem placeholder imediatamente para evitar "fantasmas"
             imgFoto.setImageResource(placeholderDrawable)
 
             if (fotoUrl != null && fotoUrl.isNotBlank()) {
@@ -86,17 +84,12 @@ class DesenvolvedorAdapter(
                         .apply(requestOptions)
                         .into(imgFoto)
                 } else {
-                    // NÃO é uma URL HTTP/HTTPS, então assumimos que é um nome de drawable
-                    // Tentar carregar como um recurso drawable local
                     val imageResId = itemView.context.resources.getIdentifier(
-                        fotoUrl, // O nome do arquivo sem extensão (ex: "ic_dev1")
+                        fotoUrl,
                         "drawable",
                         itemView.context.packageName
                     )
                     if (imageResId != 0) {
-                        // Recurso drawable encontrado!
-                        // CORREÇÃO: Usar setImageResource diretamente para recursos locais
-                        // em vez do Glide para evitar problemas de cache
                         imgFoto.setImageResource(imageResId)
                         Log.d("DevAdapter", "Drawable carregado diretamente: $fotoUrl para ${desenvolvedor.nome}")
                     } else {
