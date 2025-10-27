@@ -5,7 +5,7 @@
     "slug": "eletronica-digital-iv",
     "parents": ["eletronica-digital-i", "eletronica-digital-ii", "eletronica-digital-iii", "eletronica-digital-iv", "eletronica-digital-v"],
     "needs": [],
-    "semmester": 5,
+    "semmester": 6,
     "course": "eletrônica",
     "period": "integrado",
     "description": "Estudo dos monoestaveis",

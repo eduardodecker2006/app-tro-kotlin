@@ -5,7 +5,7 @@
     "slug": "eletronica-digital-v",
     "parents": ["eletronica-digital-i", "eletronica-digital-ii", "eletronica-digital-iii", "eletronica-digital-iv", "eletronica-digital-v"],
     "needs": [],
-    "semmester": 5,
+    "semmester": 7,
     "course": "eletrônica",
     "period": "integrado",
     "description": "Revisão de monoestaveis e estudo dos astaveis e biestaveis, como o 555",

@@ -8,7 +8,7 @@
     "semmester": 8,
     "course": "eletrônica",
     "period": "integrado",
-    "description": "Princípios da arquitetura de computadores e a aplicação de técnicas para o diagnóstico e solução de problemas de hardware",
+    "description": "Estudo dos meios/métodos de transmissão e dos equipamentos de interconexão utilizados em sistemas de redes de computadores",
     "content": "A disciplina de Organização de Computadores e Sistemas Microprocessados explora a estrutura fundamental do hardware, começando pela hierarquia de memórias, que otimiza o desempenho do sistema. Aprofunda-se no estudo da memória cache (SRAM), detalhando sua organização em níveis (L1, L2, L3) e seu funcionamento através de mapeamento, hits e misses. Em paralelo, aborda a memória principal (DRAM), incluindo seus ciclos de leitura/escrita e especificações técnicas. O curso integra esse conhecimento teórico com a prática de diagnóstico, ensinando procedimentos para solucionar problemas comuns de hardware, como a limpeza de contatos, a verificação de conexões, a interpretação de bipes da BIOS e a execução de um Clear CMOS.",
     "obs": "",
     "chapters": [""],
