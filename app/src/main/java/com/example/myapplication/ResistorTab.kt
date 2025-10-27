@@ -247,13 +247,18 @@ class ResistorTab : Fragment() {
     }
 
     private fun formatResistanceValue(value: Double): String {
+        // Adiciona uma verificação específica para o valor 0.0
+        if (value == 0.0) {
+            return String.format("%.2f Ω", 0.0) // Retorna "0.00 Ω"
+        }
+
         return when {
             value >= 1_000_000_000 -> String.format("%.2f GΩ", value / 1_000_000_000)
             value >= 1_000_000 -> String.format("%.2f MΩ", value / 1_000_000)
             value >= 1_000 -> String.format("%.2f kΩ", value / 1_000)
             value >= 1 -> String.format("%.2f Ω", value)
             value >= 0.001 -> String.format("%.2f mΩ", value * 1_000)
-            else -> String.format("%.2e Ω", value)
+            else -> String.format("%.2e Ω", value) // Agora só para valores muito pequenos (não-zero)
         }
     }
 
