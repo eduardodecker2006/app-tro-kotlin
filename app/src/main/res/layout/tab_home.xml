@@ -75,7 +75,11 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="3"
                 tools:listitem="@layout/item_favorite_card"
-                tools:visibility="visible" />
+                tools:visibility="visible"
+
+                android:requiresFadingEdge="horizontal"
+                android:fadingEdgeLength="25dp" />
+                <!-- As duas linhas acima dão o efeito Fading Edge no scroll -->
 
             <!-- TÍTULO DOS ACESSADOS RECENTEMENTE -->
             <TextView
@@ -102,7 +106,11 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:itemCount="3"
                 tools:listitem="@layout/item_favorite_card"
-                tools:visibility="visible" />
+                tools:visibility="visible"
+
+                android:requiresFadingEdge="horizontal"
+                android:fadingEdgeLength="25dp" />
+                <!-- As duas linhas acima dão o efeito Fading Edge no scroll -->
 
         </LinearLayout>
     </ScrollView>
@@ -138,7 +146,11 @@
                 android:layout_height="wrap_content"
                 android:maxHeight="400dp"
                 tools:itemCount="3"
-                tools:listitem="@layout/item_search_result" />
+                tools:listitem="@layout/item_search_result"
+
+                android:requiresFadingEdge="vertical"
+                android:fadingEdgeLength="50dp" />
+                <!-- As duas linhas acima dão o efeito Fading Edge no scroll -->
 
         </LinearLayout>
 

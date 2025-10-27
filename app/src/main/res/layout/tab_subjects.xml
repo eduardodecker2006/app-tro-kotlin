@@ -93,7 +93,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toggle_group_sort" />
+        app:layout_constraintTop_toBottomOf="@id/toggle_group_sort"
+
+        android:requiresFadingEdge="vertical"
+        android:fadingEdgeLength="25dp" />
+        <!-- As duas linhas acima dão o efeito Fading Edge no scroll -->
 
     <LinearLayout
         android:id="@+id/layout_empty_state"
